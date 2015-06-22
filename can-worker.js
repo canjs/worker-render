@@ -1,8 +1,8 @@
 var can = require("can");
 var stache = require("can/view/stache/stache");
 var live = require("can/view/live/live");
-var DiffDOM = require("diff-dom");
-var id = require("dom-id");
+var DiffDOM = require("./diff-dom");
+var id = require("./dom-id");
 
 var dd = new DiffDOM();
 
@@ -17,6 +17,7 @@ var changes = [],
 
 makeTextSetter();
 makeAttributesSetter();
+makeEventsSetter();
 
 function makeDiffer(name){
 	var oldFunction = live[name];
@@ -63,6 +64,18 @@ function makeAttributesSetter(){
 	};
 }
 
+function makeEventsSetter(){
+	var canBind = can.bind;
+	can.bind = function(eventName, callback){
+		if(isDom(this)) {
+			var el = this;
+			el.__events = el.__events || [];
+			el.__events.push(eventName);
+		}
+		return canBind.apply(this, arguments);
+	};
+}
+
 function listen(el, compute, change){
 	function teardown(){
 		compute.unbind("change", change);
@@ -71,6 +84,10 @@ function listen(el, compute, change){
 
 	compute.bind("change", change);
 	can.bind.call(el, "removed", teardown);
+}
+
+function isDom(obj){
+	return obj && !!obj.nodeType;
 }
 
 var clone = document.documentElement.cloneNode(true);
@@ -112,11 +129,12 @@ function flushChanges(){
 	postMessage({
 		changes: domChanges
 	});
+
 	flushScheduled = false;
 }
 
-onmessage = function(ev){
-	if(ev.data.type === "initial") {
+var handlers = {
+	initial: function(ev){
 		var docEl = document.documentElement;
 		docEl.innerHTML = ev.data.content;
 		document.body = (function(){
@@ -135,9 +153,27 @@ onmessage = function(ev){
 		render();
 		firstRender = true;
 		queueDiffChange(document.documentElement);
+	},
+	event: function(ev){
+		var event = ev.data.event;
+		var el = id.get(ev.data.path);
+		event.target = event.currentTarget = el;
+		if(ev.data.value) {
+			el.value = ev.data.value;
+		}
+
+		can.trigger(el, event);
 	}
 };
 
+onmessage = function(ev){
+	var handler = handlers[ev.data.type];
+	if(handler) {
+		handler(ev);
+	}
+};
+
+// Tell the main thread that we're ready to start rendering.
 postMessage("start");
 
 // Not sure the best API, this is just temporary.

@@ -12,7 +12,9 @@
   "author": "Bitovi",
   "license": "MIT",
   "devDependencies": {
-    "steal": "^0.10.5"
+    "steal": "^0.10.5",
+    "todomvc-app-css": "^1.0.1",
+    "todomvc-common": "^1.0.2"
   },
   "dependencies": {
     "can": "^2.3.0-pre.1",

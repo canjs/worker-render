@@ -32,7 +32,10 @@
     COMMENT = 27,
     CHILD_NODES = 28,
     CHECKED = 29,
-    SELECTED = 30;
+    SELECTED = 30,
+	ADD_EVENT = 31;
+
+	var isMainWindow = typeof requestAnimationFrame !== "undefined";
 
   var Diff = function (options) {
     var diff = this;
@@ -220,11 +223,17 @@
       if (node.selected) {
         objNode[SELECTED] = node.selected;
       }
+	  if(node.__events) {
+		objNode[ADD_EVENT] = [];
+		for(i = 0; i < node.__events.length; i++) {
+			objNode[ADD_EVENT].push(node.__events[i]);
+		}
+	  }
     }
     return objNode;
   };
 
-  var objToNode = function (objNode, insideSvg) {
+  var objToNode = function (objNode, insideSvg, diffOptions) {
     var node, i;
     if (objNode.hasOwnProperty(TEXT)) {
       node = document.createTextNode(objNode[TEXT]);
@@ -244,7 +253,7 @@
       }
       if (objNode[CHILD_NODES]) {
         for (i = 0; i < objNode[CHILD_NODES].length; i++) {
-          node.appendChild(objToNode(objNode[CHILD_NODES][i], insideSvg));
+          node.appendChild(objToNode(objNode[CHILD_NODES][i], insideSvg, diffOptions));
         }
       }
       if (objNode[VALUE]) {
@@ -256,10 +265,23 @@
       if (objNode[SELECTED]) {
         node.selected = objNode[SELECTED];
       }
+	  if (objNode[ADD_EVENT]) {
+		addEvents(node, objNode, diffOptions);
+	  }
     }
     return node;
   };
 
+	var addEvents = function(node, objNode, diffOptions){
+		// TODO remove events
+		var newEvents = objNode[ADD_EVENT];
+		if(newEvents) {
+			var handler = diffOptions && diffOptions.eventHandler;
+			newEvents.forEach(function(eventName){
+				node.addEventListener(eventName, handler);
+			});
+		}
+	};
 
 
   /**
@@ -588,7 +610,7 @@
 
     // ===== Create a diff =====
 
-    diff: function (t1, t2) {
+    diff: function (t1, t2, diffOptions) {
       diffcount = 0;
       t1 = cleanCloneNode(t1);
       t2 = cleanCloneNode(t2);
@@ -598,9 +620,9 @@
       }
 
       this.tracker = new DiffTracker();
-      return this.findDiffs(t1, t2);
+      return this.findDiffs(t1, t2, diffOptions);
     },
-    findDiffs: function (t1, t2) {
+    findDiffs: function (t1, t2, diffOptions) {
       var diff;
       do {
         if (this.debug) {
@@ -616,7 +638,7 @@
             difflist = [difflist];
           }
           this.tracker.add(difflist);
-          this.apply(t1, difflist);
+          this.apply(t1, difflist, diffOptions);
         }
       } while (difflist);
       return this.tracker.list;
@@ -820,7 +842,7 @@
 
     // ===== Apply a diff =====
 
-    apply: function (tree, diffs) {
+    apply: function (tree, diffs, diffOptions) {
       var dobj = this;
       if (typeof diffs.length === "undefined") {
         diffs = [diffs];
@@ -829,7 +851,7 @@
         return true;
       }
       diffs.forEach(function (diff) {
-        if (!dobj.applyDiff(tree, diff))
+        if (!dobj.applyDiff(tree, diff, diffOptions))
           return false;
       });
       return true;
@@ -851,7 +873,7 @@
       node.nodeValue = newValue;
       return;
     },
-    applyDiff: function (tree, diff) {
+    applyDiff: function (tree, diff, diffOptions) {
       var node = this.getFromRoute(tree, diff[ROUTE]);
       if (diff[ACTION] === ADD_ATTRIBUTE) {
         if (!node || !node.setAttribute)
@@ -886,7 +908,7 @@
           return false;
         this.textDiff(node, node.nodeValue, diff[OLD_VALUE], diff[NEW_VALUE]);
       } else if (diff[ACTION] === REPLACE_ELEMENT) {
-        var newNode = objToNode(diff[NEW_VALUE]);
+        var newNode = objToNode(diff[NEW_VALUE], false, diffOptions);
         node.parentNode.replaceChild(newNode, node);
       } else if (diff[ACTION] === RELOCATE_GROUP) {
         var group = diff[GROUP],
@@ -918,7 +940,8 @@
         var route = diff[ROUTE].slice(),
           c = route.splice(route.length - 1, 1)[0];
         node = this.getFromRoute(tree, route);
-        var newNode = objToNode(diff[ELEMENT]);
+		var objNode = diff[ELEMENT];
+        var newNode = objToNode(objNode, false, diffOptions);
         if (c >= node.childNodes.length) {
           node.appendChild(newNode);
         } else {
