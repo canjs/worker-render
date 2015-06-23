@@ -1,8 +1,9 @@
-steal("can/view/stache", "can-worker", function(stache, canWorker){
+steal("can/view/stache", "can-worker/worker", function(stache, canWorker){
 
-	canWorker.initialRender = render;
+	canWorker.startup(render);
 
 	var template = stache(
+		"<button can-click='start'>Start</button>" +
 		"<div>Performed {{loopCount}} iterations in {{totalTime}} ms (average {{average}} ms per loop).</div>" +
 		"{{#each boxes}}"+
 			"<div class='box-view'>"+
@@ -43,7 +44,7 @@ steal("can/view/stache", "can-worker", function(stache, canWorker){
 		boxes.push( box );
 	}
 
-	var map = new can.Map({boxes: boxes});
+	var map = new can.Map({boxes: boxes, start: runBenchmark});
 	function render() {
 		var frag = template(map);
 		var div = document.createElement("div")

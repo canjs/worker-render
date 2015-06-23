@@ -1,7 +1,7 @@
-var Model = require("can/model/");
+var IDBModel = require("./can.indexeddb");
 
 // Basic Todo entry model
-var Todo = can.Model.extend({
+var Todo = IDBModel.extend({
 }, {
 	init: function () {
 		// Autosave when changing the text or completing the todo

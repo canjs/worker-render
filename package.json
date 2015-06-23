@@ -2,7 +2,7 @@
   "name": "can-worker",
   "version": "0.0.1",
   "description": "Run CanJS apps in a WebWorker",
-  "main": "can-min.js",
+  "main": "dist/cjs/window/window.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,9 +18,14 @@
   },
   "dependencies": {
     "can": "^2.3.0-pre.1",
-    "jquery": "^2.1.4"
+    "jquery": "^2.1.4",
+    "micro-location": "^0.1.4"
   },
   "system": {
+	"main": "window/window",
+    "directories": {
+      "lib": "src"
+    },
     "configDependencies": [
       "system-config"
     ]

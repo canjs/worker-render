@@ -15,8 +15,8 @@
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
 		<script src="../node_modules/steal/steal.js" main="@empty">
-			var canMin = require("can-min");
-			canMin("todomvc/main");
+			var canWorker = require("can-worker/window/");
+			canWorker("todomvc/main");
 		</script>
 	</body>
 </html>

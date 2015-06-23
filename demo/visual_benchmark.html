@@ -41,21 +41,12 @@
 	</style>
 </head>
 <body>
-<button id='start'>Start</button>
-<button id='stop'>Stop</button>
+<!--<button id='start'>Start</button>
+<button id='stop'>Stop</button>-->
 <div id='timing'></div>
 <script type="text/javascript" src="../node_modules/steal/steal.js" main="@empty">
-	var canMin = require("can-min");
-	canMin("demo/circles");
-
-	// Hack to get buttons to work for now.
-	var $ = document.querySelector.bind(document);
-	$("#start").addEventListener("click", function(){
-		renderWorker.postMessage("start");
-	});
-	$("#stop").addEventListener("click", function(){
-		renderWorker.postMessage("stop");
-	});
+	var canWorker = require("can-worker/window/");
+	canWorker("demo/circles");
 </script>
 </body>
 </html>

@@ -28,6 +28,15 @@ exports.get = function (path, doc){
 	return cur;
 };
 
+exports.getId = function(str){
+	return str ? str.split(",") : [];
+};
+
+exports.set = function(el){
+	var path = make(el);
+	el.path = path;
+};
+
 /**
  * @function domId.make
  *

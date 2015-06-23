@@ -12,7 +12,7 @@ can.Component.extend({
 		// Store the Todo model in the scope
 		Todo: Todo,
 		// A list of all Todos retrieved from LocalStorage
-		todos: new Todo.List(),
+		todos: new Todo.List({}),
 		// Edit a Todo
 		edit: function (todo, el) {
 			todo.attr('editing', true);
@@ -52,7 +52,6 @@ can.Component.extend({
 			}
 		},
 		createTodo: function (context, el) {
-			debugger;
 			var value = can.trim(el.val());
 			var TodoModel = this.Todo;
 

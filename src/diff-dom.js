@@ -33,7 +33,9 @@
     CHILD_NODES = 28,
     CHECKED = 29,
     SELECTED = 30,
-	ADD_EVENT = 31;
+	EVENTS = 31,
+	ADD_EVENT = 32,
+	REMOVE_EVENT = 33;
 
 	var isMainWindow = typeof requestAnimationFrame !== "undefined";
 
@@ -224,9 +226,10 @@
         objNode[SELECTED] = node.selected;
       }
 	  if(node.__events) {
-		objNode[ADD_EVENT] = [];
-		for(i = 0; i < node.__events.length; i++) {
-			objNode[ADD_EVENT].push(node.__events[i]);
+		objNode[EVENTS] = [];
+		var events = Object.keys(node.__events);
+		for(i = 0; i < events.length; i++) {
+			objNode[EVENTS].push(events[i]);
 		}
 	  }
     }
@@ -265,7 +268,7 @@
       if (objNode[SELECTED]) {
         node.selected = objNode[SELECTED];
       }
-	  if (objNode[ADD_EVENT]) {
+	  if (objNode[EVENTS]) {
 		addEvents(node, objNode, diffOptions);
 	  }
     }
@@ -276,9 +279,11 @@
 		// TODO remove events
 		var newEvents = objNode[ADD_EVENT];
 		if(newEvents) {
+			node.__events = {};
 			var handler = diffOptions && diffOptions.eventHandler;
 			newEvents.forEach(function(eventName){
-				node.addEventListener(eventName, handler);
+				node.addEventListener(eventName, handler, false);
+				node.__events[eventName] = true;
 			});
 		}
 	};
@@ -680,6 +685,8 @@
         },
         attr1 = t1.attributes ? slice.call(t1.attributes).sort(byName) : [],
         attr2 = t2.attributes ? slice.call(t2.attributes).sort(byName) : [],
+		ev1 = t1.__events || {},
+		ev2 = t2.__events || {},
         find = function (attr, list) {
           for (var i = 0, last = list.length; i < last; i++) {
             if (list[i].name === attr.name)
@@ -751,6 +758,25 @@
         diffs.push(new Diff(k));
 
       });
+
+	  // Events
+	  var makeEventDiff = function(action, name){
+		var k = {};
+		k[ACTION] = action;
+		k[ROUTE] = route;
+		k[NAME] = name;
+		diffs.push(new Diff(k));
+	  };
+	  for(var evName in ev1) {
+		if(!ev2[evName]) {
+			makeEventDiff(REMOVE_EVENT, evName);
+		}
+	  }
+	  for(var evName in ev2) {
+		if(!ev1[evName]) {
+			makeEventDiff(ADD_EVENT, evName);
+		}
+	  }
 
       if ((t1.selected || t2.selected) && t1.selected !== t2.selected) {
         if (diffs.length > 0) {
@@ -961,7 +987,22 @@
           var reference = node.childNodes.item(c);
           node.insertBefore(newNode, reference);
         }
-      }
+      } else if (diff[ACTION] === REMOVE_EVENT) {
+		var route = diff[ROUTE];
+		node = this.getFromRoute(tree, route);
+		var handler = (diffOptions && diffOptions.eventHandler) || function(){};
+		node.removeEventListener(diff[NAME], handler);
+		if(node.__events) {
+			delete node.__events[diff[NAME]];
+		}
+	  } else if (diff[ACTION] === ADD_EVENT) {
+		var route = diff[ROUTE];
+		node = this.getFromRoute(tree, route);
+		var handler = (diffOptions && diffOptions.eventHandler) || function(){};
+		node.addEventListener(diff[NAME], handler);
+		if(!node.__events) node.__events = {};
+		node.__events[diff[NAME]] = true;
+	  }
       return true;
     },
 
