@@ -16,14 +16,31 @@ module.exports = function(main){
 		});
 	};
 
+	var valueSetters = {
+		INPUT: function(ev, el){
+			if(el.type === "checkbox") {
+				return { checked: el.checked, value: el.value };
+			} else {
+				return { value: el.value };
+			}
+		}
+	};
+
 	var diffOptions = {
 		eventHandler: function(ev){
-			var path = id.make(ev.target);
+			var el = ev.target;
+			var path = id.make(el);
+			var values;
+
+			if(valueSetters[el.tagName]) {
+				values = valueSetters[el.tagName](ev, el);
+			}
+
 			worker.postMessage({
 				type: "event",
 				path: path,
 				event: extend({}, ev),
-				value: ev.target.value
+				values: values
 			});
 		}
 	};

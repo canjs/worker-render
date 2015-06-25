@@ -23,7 +23,7 @@ define(['can/util/', 'can/model/'], function(can, Model) {
 	return Model.extend({
 	  // Implement local storage handling
 	  localStore: function(cb) {
-		var todos = [];
+		var todos = [], prevTodos;
 		var model = this;
 
 		open().then(function(db){
@@ -38,6 +38,7 @@ define(['can/util/', 'can/model/'], function(can, Model) {
 					todos.push(cursor.value);
 					cursor.continue();
 				} else {
+					prevTodos = todos.slice();
 					cb.call(model, todos);
 					done();
 				}
@@ -46,6 +47,11 @@ define(['can/util/', 'can/model/'], function(can, Model) {
 			function done(){
 				(todos || []).forEach(function(todo){
 					os.put(todo);
+				});
+				prevTodos.forEach(function(todo){
+					if(todos.indexOf(todo) === -1) {
+						os["delete"](todo.text);
+					}
 				});
 			}
 		});

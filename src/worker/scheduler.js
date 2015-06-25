@@ -1,4 +1,5 @@
 var domId = require("../dom-id");
+require("setimmediate");
 
 var changes = {},
 	globals = [],

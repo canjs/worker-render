@@ -2,6 +2,7 @@ var handlers = require("./handlers/handlers");
 var schedule = require("./scheduler").schedule;
 var syncDom = require("./sync-dom");
 var domId = require("../dom-id");
+var workerState = require("./state");
 
 require("./overrides/diff");
 require("./overrides/attributes");
@@ -23,7 +24,8 @@ exports.startup = function(render){
 		render();
 
 		schedule(document.documentElement, function(path){
-			var diff = syncDom(path, document.documentElement);
+			var diff = syncDom(path, document.documentElement, true);
+			workerState.firstRender = true;
 			return { type: "diff", diff: diff };
 		});
 

@@ -13,16 +13,18 @@
   "license": "MIT",
   "devDependencies": {
     "steal": "^0.10.5",
+    "steal-qunit": "0.0.4",
     "todomvc-app-css": "^1.0.1",
     "todomvc-common": "^1.0.2"
   },
   "dependencies": {
     "can": "^2.3.0-pre.1",
     "jquery": "^2.1.4",
-    "micro-location": "^0.1.4"
+    "micro-location": "^0.1.4",
+    "setimmediate": "^1.0.2"
   },
   "system": {
-	"main": "window/window",
+    "main": "window/window",
     "directories": {
       "lib": "src"
     },

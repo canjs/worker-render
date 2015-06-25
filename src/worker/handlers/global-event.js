@@ -6,7 +6,7 @@ module.exports = function(ev){
 	event.target = event.currentTarget = ev.target;
 
 	// Pre-conditions for global events.
-	if(secial[event.type]) {
+	if(special[event.type]) {
 		special[event.type](event);
 	}
 
