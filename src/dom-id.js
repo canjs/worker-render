@@ -8,7 +8,24 @@
 var slice = [].slice;
 
 // An object for caching nodes
-var nodeCache = {};
+var nodeCache = exports.nodeCache = {};
+
+/**
+ * A data structure used to invalidate ids when new nodes are inserted into
+ * the DOM. The structure is like:
+ *
+ * [
+ *   10: [
+ *     element: Element,
+ *     2: [
+ *       element: Element
+ *     ]
+ *   ]
+ * ]
+ *
+ * If we insert an id of "0.2"
+ */
+var nodeTree = exports.nodeTree = [];
 
 // Separator for our dom ids
 var SEPARATOR = ".";
@@ -24,6 +41,34 @@ var SEPARATOR = ".";
  */
 var rootNode = exports.rootNode = function(root){
 	return (root ? root.documentElement : root) || document.documentElement;
+};
+
+/**
+ * @function can-worker/dom-id/updateNodeTree
+ * @parent can-worker/dom-id
+ *
+ * Update the nodeTree for a given id. The nodeTree is described above.
+ */
+var updateNodeTree = function(id){
+	var map, parentId;
+	var ids = id.split(".");
+	var childId = id;
+
+
+	/*while(ids.length > 2) {
+		ids.pop();
+		parentId = ids.join(".");
+		map = parentMap[parentId];
+		if(!map) {
+			map = parentMap[parentId] = {length: 0};
+		}
+		if(!map[childId]) {
+			map[childId] = true;
+			map.length++;
+		}
+		childId = parentId;
+	}*/
+
 };
 
 var cache = function(node, id){
@@ -45,7 +90,7 @@ var cache = function(node, id){
  * @return {String} id of the node
  */
 var getID = exports.getID = function(node, cacheResult){
-	var id = node.__route;
+	var id = getCachedID(node);
 	if(id) {
 		// Caching
 		if(nodeCache[id]) {
@@ -59,60 +104,44 @@ var getID = exports.getID = function(node, cacheResult){
 		// Get the route to the node.
 		var id = getRoute(node);
 
+		var branch = nodeTree;
+		var ids = id.split(".");
+
 		cache(node, id);
 	}
 	return id;
 };
 
-function getRoute(node) {
-	var id = "",
-		cur = node,
-		par, idx;
-	while(cur) {
-		par = cur.parentNode;
-		if(par) {
-			idx = -1;
-			child = par.firstChild;
-			while(child) {
-				idx++;
-				if(child === cur) {
-					break;
-				}
-				child = child.nextSibling;
-			}
-			id = id + SEPARATOR + idx;
-		}
-		cur = par;
-	}
-	return id.substr(2);
-}
-
-
-/**
- * Checks if a character in the supplied ID is a separator or the end.
- *
- * @param {string} id A React DOM ID.
- * @param {number} index Index of the character to check.
- * @return {boolean} True if the character is a separator or end of the ID.
- * @private
- */
-var isBoundary = exports.isBoundary = function(id, index){
-	return id.charAt(index) === SEPARATOR || index === id.length;
-}
-
-/**
- * Checks if the first ID is an ancestor of or equal to the second ID.
- *
- * @param {string} ancestorID
- * @param {string} descendantID
- * @return {boolean} True if `ancestorID` is an ancestor of `descendantID`.
- */
-var isAncestorIDOf = exports.isAncestorIDOf = function(ancestorID, descendantID){
-	return (
-		descendantID.indexOf(ancestorID) === 0 &&
-		isBoundary(descendantID, ancestorID.length)
-	);
+var getCachedID = exports.getCachedID = function(node){
+	return node.__route;
 };
+
+/**
+ * Generates the route for a particular node, caching the intermediate nodes
+ * along the way.
+ */
+function getRoute(node) {
+	var id = "";
+
+	var parent = node.parentNode;
+	var index = -1;
+
+	var child = parent.firstChild;
+	while(child) {
+		index++;
+		if(child === node) {
+			break;
+		}
+		child = child.nextSibling;
+	}
+
+	var parentId = parent.nodeType === 9 ? "" :
+		getCachedID(parent) || getRoute(parent);
+
+	id = (parentId ? parentId + SEPARATOR : "") + index;
+
+	return id;
+}
 
 /**
  * @function can-worker/dom-id.findNode findNode
@@ -176,12 +205,35 @@ exports.getNode = function(id, root){
 	return node;
 };
 
+/**
+ * @function can-worker/dom-id.purgeID purgeID
+ * @parent can-worker/dom-id
+ *
+ * Remove caching associated with an id.
+ */
 exports.purgeID = function(id){
 	var node = nodeCache[id];
 	if(node) {
 		delete node.__route;
 		delete nodeCache[id];
 	}
+};
+
+exports.purgeIDsOfSiblings = function(node){
+	var id = exports.getCachedID(node);
+
+	var parentIdArray = id.split(".");
+	parentIdArray.pop();
+
+	var children = parentMap[parentIdArray.join(".")];
+	if(children) {
+		for(var childId in children) {
+			if(childId !== id) {
+				exports.purgeID(childId);
+			}
+		}
+	}
+
 };
 
 
