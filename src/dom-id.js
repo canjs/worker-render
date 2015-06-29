@@ -71,9 +71,9 @@ var updateNodeTree = function(id){
 
 };
 
-var cache = function(node, id){
-	node.__route = id;
-	nodeCache[id] = node;
+var cache = function(node, routeInfo){
+	node.__routeInfo = routeInfo;
+	nodeCache[routeInfo.id] = node;
 };
 
 /**
@@ -91,30 +91,36 @@ var cache = function(node, id){
  */
 var getID = exports.getID = function(node, cacheResult){
 	var id = getCachedID(node);
-	if(id) {
-		// Caching
-		if(nodeCache[id]) {
-			if(nodeCache[id] !== node) {
-				nodeCache[id] = node;
-			}
-		} else {
-			nodeCache[id] = node;
-		}
-	} else {
+	if(!id) {
 		// Get the route to the node.
-		var id = getRoute(node);
-
-		var branch = nodeTree;
-		var ids = id.split(".");
-
-		cache(node, id);
+		var routeInfo = getRoute(node);
+		id = routeInfo.id;
 	}
 	return id;
 };
 
-var getCachedID = exports.getCachedID = function(node){
-	return node.__route;
+var getCachedInfo = exports.getCachedInfo = function(node){
+	return node.__routeInfo;
 };
+
+var getCachedID = exports.getCachedID = function(node){
+	var info = getCachedInfo(node);
+	return info && info.id;
+};
+
+var getIndex = exports.getIndex = function(id){
+	return +id.substr(id.lastIndexOf(".") + 1);
+};
+
+function getBranch(index, element, parentBranch) {
+	parentBranch = parentBranch || nodeTree;
+	var branch = parentBranch[index];
+	if(!branch) {
+		branch = parentBranch[index] = [];
+		branch.element = element;
+	}
+	return branch;
+}
 
 /**
  * Generates the route for a particular node, caching the intermediate nodes
@@ -135,12 +141,22 @@ function getRoute(node) {
 		child = child.nextSibling;
 	}
 
-	var parentId = parent.nodeType === 9 ? "" :
-		getCachedID(parent) || getRoute(parent);
+	// ARG!
+
+	var parentInfo = parent.nodeType === 9 ? {id:""} :
+		getCachedInfo(parent) || getRoute(parent);
+
+	var parentId = parentInfo.id;
 
 	id = (parentId ? parentId + SEPARATOR : "") + index;
 
-	return id;
+	var routeInfo = {
+		id: id,
+		branch: getBranch(index, node, parentInfo.branch)
+	};
+	cache(node, routeInfo);
+
+	return routeInfo;
 }
 
 /**
@@ -214,28 +230,31 @@ exports.getNode = function(id, root){
 exports.purgeID = function(id){
 	var node = nodeCache[id];
 	if(node) {
-		delete node.__route;
+		delete node.__routeInfo;
 		delete nodeCache[id];
 	}
 };
 
-exports.purgeIDsOfSiblings = function(node){
-	var id = exports.getCachedID(node);
-
-	var parentIdArray = id.split(".");
-	parentIdArray.pop();
-
-	var children = parentMap[parentIdArray.join(".")];
-	if(children) {
-		for(var childId in children) {
-			if(childId !== id) {
-				exports.purgeID(childId);
+exports.purgeSiblings = function(node){
+	var routeInfo = getCachedInfo(node);
+	var parentRouteInfo = getCachedInfo(node.parentNode);
+	if(parentRouteInfo) {
+		var parentBranch = parentRouteInfo.branch;
+		var index = getIndex(routeInfo.id);
+		var staleBranch = false;
+		parentBranch.forEach(function(branch, i){
+			if(i > index) {
+				// This branch is stale, remove it.
+				staleBranch = true;
+				return false;
 			}
+		});
+		if(staleBranch) {
+			parentBranch.length = 0;
+			parentBranch[index] = routeInfo.branch;
 		}
 	}
-
 };
-
 
 
 

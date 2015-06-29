@@ -12,6 +12,9 @@ module.exports = function(doc){
 			markAsInDocument(child);
 
 			getChildren(child).forEach(function(node){
+				domId.getID(node);
+				domId.purgeSiblings(node);
+
 				schedule(node, function(route){
 					var diff = syncDom(route, node);
 
