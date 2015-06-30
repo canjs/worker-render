@@ -4,7 +4,7 @@
   "description": "Run CanJS apps in a WebWorker",
   "main": "dist/cjs/window/window.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "testee test/test.html --browsers firefox --reporter Spec"
   },
   "keywords": [
     "CanJS"
@@ -14,6 +14,7 @@
   "devDependencies": {
     "steal": "^0.10.5",
     "steal-qunit": "0.0.4",
+    "testee": "^0.2.0",
     "todomvc-app-css": "^1.0.1",
     "todomvc-common": "^1.0.2"
   },
