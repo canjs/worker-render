@@ -1,17 +1,21 @@
 var domId = require("../dom-id");
 require("setimmediate");
 
-var changes = {},
+var changedRoutes = {},
+	changes = [],
 	globals = [],
 	flushScheduled;
 
 exports.schedule = function schedule(el, callbackOrData){
-	var path = domId.make(el);
+	var route = domId.getID(el);
 
-	if(!changes[path]) {
-		changes[path] = callbackOrData;
-		exports.scheduleFlush();
+	if(!changedRoutes[route]) {
+		changes.push(route);
 	}
+
+	changedRoutes[route] = callbackOrData;
+
+	exports.scheduleFlush();
 };
 
 exports.scheduleGlobal = function scheduleGlobal(callback){
@@ -35,27 +39,39 @@ exports.flushChanges = function flushChanges(){
 		domChanges.push(fn());
 	});
 
-	for(var path in changes) {
-		path = domId.getId(path);
-		fn = changes[path];
+	changes.forEach(function(route){
+		var fn = changedRoutes[route];
+		//var route = change.route;
+		//var fn = change.callback;
+
 		if(typeof fn === "function") {
-			res = fn(path);
+			res = fn(route);
 		} else {
 			res = fn;
 		}
 		// Callbacks could return undefined which means do nothing.
 		if(res) {
-			res.path = path;
+			res.route = route;
 			domChanges.push(res);
 		}
-	}
-	changes = {};
-	globals = [];
 
-	postMessage({
-		changes: domChanges
 	});
+
+	changedRoutes = {};
+	changes.length = 0;
+	globals.length = 0;
+
+	postMessage(domChanges);
 
 	flushScheduled = false;
 };
+
+function str2ab(str) {
+  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+  var bufView = new Uint16Array(buf);
+  for (var i=0, strLen=str.length; i<strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
 
