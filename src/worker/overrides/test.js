@@ -6,13 +6,11 @@ require("can/view/stache/");
 var domId = require("../../dom-id");
 var markAsInDocument = require("./utils/mark_in_document");
 
-var insert = require("./insert");
-var textNode = require("./text");
+require("./insert");
+require("./prop");
 
 QUnit.module("can-worker overrides", {
 	setup: function(){
-		console.log("calling setup");
-
 		this.oldPostMessage = window.postMessage;
 		window.postMessage = function(){};
 		this.doc = can.document = new simpleDOM.Document();
@@ -30,13 +28,8 @@ QUnit.test("Nodes appended to the DOM are in the document", function(){
 	var frag = template();
 	this.doc.documentElement.appendChild(frag);
 
-	var div = frag.firstChild;
-	var span = div.firstChild;
-
+	var span = frag.firstChild.firstChild;
 	equal(span.inDocument, true, "span is in the document");
-
-	var id = domId.getCachedID(div);
-	equal(id, "0.1", "div is correctly ided");
 });
 
 QUnit.test("Inserting a sibling will reset ids", function(){

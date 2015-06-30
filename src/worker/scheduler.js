@@ -16,14 +16,6 @@ exports.schedule = function schedule(el, callbackOrData){
 	changedRoutes[route] = callbackOrData;
 
 	exports.scheduleFlush();
-
-	/*
-	if(!changedRoutes[route]) {
-		changedRoutes[route] = callbackOrData;
-		changes.push(route);
-		//changes.push({ route: route, callback: callbackOrData });
-		exports.scheduleFlush();
-	}*/
 };
 
 exports.scheduleGlobal = function scheduleGlobal(callback){
