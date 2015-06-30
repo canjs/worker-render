@@ -61,10 +61,20 @@ exports.flushChanges = function flushChanges(){
 	changes.length = 0;
 	globals.length = 0;
 
-	postMessage({
-		changes: domChanges
-	});
+	var msg = JSON.stringify(domChanges);
+	var ab = str2ab(msg);
+
+	postMessage(ab, [ab]);
 
 	flushScheduled = false;
 };
+
+function str2ab(str) {
+  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+  var bufView = new Uint16Array(buf);
+  for (var i=0, strLen=str.length; i<strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
 

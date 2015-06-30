@@ -77,6 +77,10 @@ module.exports = function(main){
 
 	};
 
+	function ab2str(buf) {
+	  return String.fromCharCode.apply(null, new Uint16Array(buf));
+	}
+
 	worker.onmessage = function(ev){
 		if(ev.data === "start"){
 			worker.postMessage({
@@ -87,7 +91,10 @@ module.exports = function(main){
 			return;
 		}
 
-		var changes = ev.data.changes;
+		var msg = ab2str(ev.data);
+		var data = JSON.parse(msg);
+
+		var changes = data;
 		changes.forEach(function(data){
 			// Apply the change
 			handlers[data.type](data);

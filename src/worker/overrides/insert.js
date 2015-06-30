@@ -21,7 +21,7 @@ proto.insertBefore = function(child){
 	return res;
 };
 
- function maybeRegisterElementForDiffing(child){
+function maybeRegisterElementForDiffing(child){
 	var parent = nodeParent(child);
 	if(parent && parent.inDocument && shouldDiff(parent)) {
 		markAsInDocument(child);
