@@ -4,15 +4,20 @@ var simpleDOM = require("can-simple-dom");
 require("can/util/vdom/build_fragment/");
 require("can/view/stache/");
 var domId = require("../../dom-id");
+var markAsInDocument = require("./utils/mark_in_document");
 
 var insert = require("./insert");
+var textNode = require("./text");
 
 QUnit.module("can-worker overrides", {
 	setup: function(){
+		console.log("calling setup");
+
 		this.oldPostMessage = window.postMessage;
 		window.postMessage = function(){};
 		this.doc = can.document = new simpleDOM.Document();
-		insert(this.doc);
+
+		markAsInDocument(this.doc.documentElement);
 	},
 	teardown: function(){
 		window.postMessage = this.oldPostMessage;
@@ -31,7 +36,6 @@ QUnit.test("Nodes appended to the DOM are in the document", function(){
 	equal(span.inDocument, true, "span is in the document");
 
 	var id = domId.getCachedID(div);
-	console.log(id);
 	equal(id, "0.1", "div is correctly ided");
 });
 
@@ -51,4 +55,17 @@ QUnit.test("Inserting a sibling will reset ids", function(){
 	// It should be removed from the nodeCache
 	equal(domId.nodeCache["0.1.0.0.0.0"], undefined, "SPAN is no longer in the map");
 	equal(domId.nodeCache["0.1.0.0.0"], ul.firstChild, "The new LI is in the map");
+});
+
+QUnit.test("Setting a TextNode will create an id", function(){
+	var template = can.stache("<div>{{name}}</div>");
+	var map = new can.Map({name:"matthew"});
+	var frag = template(map);
+
+	this.doc.documentElement.appendChild(frag);
+
+	map.attr("name", "wilbur");
+
+	var textNode = frag.firstChild.firstChild;
+	equal(domId.nodeCache["0.1.0"], textNode, "it is the text node");
 });

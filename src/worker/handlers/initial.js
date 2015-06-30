@@ -1,6 +1,7 @@
 var route = require("can/route/route");
 var Location = require("micro-location");
 var workerState = require("../state");
+var markAsInDocument = require("../overrides/utils/mark_in_document");
 
 module.exports = function(ev){
 	route.location = Location.parse(ev.data.location);
@@ -19,4 +20,9 @@ module.exports = function(ev){
 	})();
 
 	workerState.clonedDom = document.documentElement.cloneNode(true);
+
+	markAsInDocument(docEl);
+
+	workerState.clonedDom.dontDiff = true;
+	markAsInDocument(workerState.clonedDom);
 };

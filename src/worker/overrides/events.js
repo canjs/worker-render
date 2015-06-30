@@ -1,13 +1,13 @@
 var scheduleGlobal = require("../scheduler").scheduleGlobal;
 var isNode = require("../../is-node");
+var Node = require("can-simple-dom/simple-dom/document/node")["default"];
 
 
-var node = document.createElement("div");
-var NodeProto = node.constructor.prototype.__proto__;
-var addEventListener = NodeProto.addEventListener;
-var removeEventListener = NodeProto.removeEventListener;
+var proto = Node.prototype;
+var addEventListener = proto.addEventListener;
+var removeEventListener = proto.removeEventListener;
 
-NodeProto.addEventListener = function(eventName){
+proto.addEventListener = function(eventName){
 	if(isNode(this)) {
 		var el = this;
 		if(!el.__events) {
@@ -18,7 +18,7 @@ NodeProto.addEventListener = function(eventName){
 	return addEventListener.apply(this, arguments);
 };
 
-NodeProto.removeEventListener = function(eventName){
+proto.removeEventListener = function(eventName){
 	if(isNode(this)) {
 		var el = this;
 		if(el.__events) {

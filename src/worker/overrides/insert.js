@@ -1,51 +1,47 @@
 var schedule = require("../scheduler").schedule;
 var domId = require("../../dom-id");
 var syncDom = require("../sync-dom");
+var Node = require("can-simple-dom/simple-dom/document/node")["default"];
+var markAsInDocument = require("./utils/mark_in_document");
+var shouldDiff = require("./utils/should_diff");
 
-module.exports = function(doc){
-	doc = doc || document;
-	markAsInDocument(doc.documentElement);
+var proto = Node.prototype;
 
-	var maybeRegisterElementForDiffing = function(child){
-		var parent = nodeParent(child);
-		if(parent && parent.inDocument) {
-			markAsInDocument(child);
-
-			getChildren(child).forEach(function(node){
-				domId.getID(node);
-				domId.purgeSiblings(node);
-
-				schedule(node, function(route){
-					var diff = syncDom(route, node);
-
-					if(diff.length) {
-						return {
-							type: "diff",
-							diff: diff
-						}
-					}
-				});
-			});
-		}
-	};
-
-	var testElement = doc.createElement("div");
-	var proto = testElement.constructor.prototype.__proto__;
-
-	var appendChild = proto.appendChild;
-	proto.appendChild = function(child){
-		var res = appendChild.apply(this, arguments);
-		maybeRegisterElementForDiffing(child);
-		return res;
-	};
-
-	var insertBefore = proto.insertBefore;
-	proto.insertBefore = function(child){
-		var res = insertBefore.apply(this, arguments);
-		maybeRegisterElementForDiffing(child);
-		return res;
-	};
+var appendChild = proto.appendChild;
+proto.appendChild = function(child){
+	var res = appendChild.apply(this, arguments);
+	maybeRegisterElementForDiffing(child);
+	return res;
 };
+
+var insertBefore = proto.insertBefore;
+proto.insertBefore = function(child){
+	var res = insertBefore.apply(this, arguments);
+	maybeRegisterElementForDiffing(child);
+	return res;
+};
+
+ function maybeRegisterElementForDiffing(child){
+	var parent = nodeParent(child);
+	if(parent && parent.inDocument && shouldDiff(parent)) {
+		markAsInDocument(child);
+
+		if(child.nodeType === 1) {
+			domId.getID(child);
+			domId.purgeSiblings(child);
+		}
+
+		schedule(parent, function(route){
+			var diff = syncDom(route, parent);
+			if(diff.length) {
+				return {
+					type: "diff",
+					diff: diff
+				};
+			}
+		});
+	}
+}
 
 function nodeParent(child){
 	return child.nodeType === 11 ? child.firstChild.parentNode : child.parentNode;
@@ -64,21 +60,4 @@ function getChildren(el){
 	}
 	return children;
 
-}
-
-function markAsInDocument(element){
-	var cur = element;
-
-	while(cur) {
-		if(cur.nodeType === 1) {
-			cur.inDocument = true;
-		}
-		var child = cur.firstChild;
-		while(child) {
-			markAsInDocument(child);
-
-			child = child.nextSibling;
-		}
-		cur = cur.nextSibling;
-	}
 }

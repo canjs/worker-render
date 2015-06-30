@@ -4,9 +4,9 @@ var syncDom = require("./sync-dom");
 var domId = require("../dom-id");
 var workerState = require("./state");
 
-require("./overrides/diff");
+require("./overrides/insert");
 require("./overrides/attributes");
-require("./overrides/text");
+require("./overrides/prop");
 require("./overrides/events");
 
 /**

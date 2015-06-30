@@ -1,6 +1,6 @@
 var loader = require("@loader");
 var DiffDOM = require("../diff-dom");
-var id = require("../dom-id");
+var domId = require("../dom-id");
 var elements = require("can/view/elements.js");
 
 var dd = new DiffDOM();
@@ -19,7 +19,7 @@ module.exports = function(main){
 	var valueSetters = {
 		INPUT: function(ev, el){
 			if(el.type === "checkbox") {
-				return { checked: el.checked, value: el.value };
+				return { checked: el.checked, value: el.checked };
 			} else {
 				return { value: el.value };
 			}
@@ -29,7 +29,7 @@ module.exports = function(main){
 	var diffOptions = {
 		eventHandler: function(ev){
 			var el = ev.target;
-			var path = id.make(el);
+			var route = domId.getID(el);
 			var values;
 
 			if(valueSetters[el.tagName]) {
@@ -38,7 +38,7 @@ module.exports = function(main){
 
 			worker.postMessage({
 				type: "event",
-				path: path,
+				route: route,
 				event: extend({}, ev),
 				values: values
 			});
@@ -48,21 +48,26 @@ module.exports = function(main){
 	var handlers = {
 
 		diff: function(data){
-			var path = data.path;
+			var route = data.route;
 			var diff = data.diff;
 
-			var el = id.get(path);
+			var el = domId.findNode(route);
 			dd.apply(el, diff, diffOptions);
 		},
 
 		text: function(data){
-			var node = id.get(data.path);
+			var node = domId.findNode(data.route);
 			node.nodeValue = data.value;
 		},
 
 		attribute: function(data){
-			var el = id.get(data.path);
+			var el = domId.findNode(data.route);
 			elements.setAttr(el, data.attr, data.value);
+		},
+
+		prop: function(data){
+			var el = domId.findNode(data.route);
+			el[data.prop] = data.value;
 		},
 
 		globalEvent: function(data){
