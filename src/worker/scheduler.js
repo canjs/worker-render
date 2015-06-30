@@ -61,10 +61,7 @@ exports.flushChanges = function flushChanges(){
 	changes.length = 0;
 	globals.length = 0;
 
-	var msg = JSON.stringify(domChanges);
-	var ab = str2ab(msg);
-
-	postMessage(ab, [ab]);
+	postMessage(domChanges);
 
 	flushScheduled = false;
 };
