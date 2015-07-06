@@ -39,6 +39,8 @@ exports.flushChanges = function flushChanges(){
 		domChanges.push(fn());
 	});
 
+	console.log("Flushing:", changes);
+
 	changes.forEach(function(route){
 		var fn = changedRoutes[route];
 		//var route = change.route;
@@ -65,13 +67,3 @@ exports.flushChanges = function flushChanges(){
 
 	flushScheduled = false;
 };
-
-function str2ab(str) {
-  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-  var bufView = new Uint16Array(buf);
-  for (var i=0, strLen=str.length; i<strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf;
-}
-

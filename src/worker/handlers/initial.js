@@ -3,11 +3,11 @@ var Location = require("micro-location");
 var workerState = require("../state");
 var markAsInDocument = require("../overrides/utils/mark_in_document");
 
-module.exports = function(ev){
-	route.location = Location.parse(ev.data.location);
+module.exports = function(data){
+	route.location = Location.parse(data.location);
 
 	var docEl = document.documentElement;
-	docEl.innerHTML = ev.data.content;
+	docEl.innerHTML = data.content;
 	document.body = (function(){
 		var child = docEl.firstChild;
 		while(child) {

@@ -51,6 +51,13 @@
     }
   };
 
+  var FastDiff = function(props){
+	/*var diff = this;
+	props.forEach(function(prop){
+		diff[prop[0]] = prop[1];
+	});*/
+  };
+
   var SubsetMapping = function SubsetMapping(a, b) {
     this["old"] = a;
     this["new"] = b;
@@ -160,6 +167,9 @@
 
 
   var cleanCloneNode = function (node) {
+	// TODO Why do we need to clone? Let's not for now.
+	return node;
+
     // Clone a node with contents and add values manually,
     // to avoid https://bugzilla.mozilla.org/show_bug.cgi?id=230307
     var clonedNode = node.cloneNode(true),
@@ -362,23 +372,6 @@
 		arr[i] = v;
 	}
 	return arr;
-
-	/*
-    var deepcopy = function (v) {
-      v.slice();
-      for (var i = 0, last = v.length; i < last; i++) {
-        if (v[i] instanceof Array) {
-          v[i] = deepcopy(v[i]);
-        }
-      }
-    };
-    if (v instanceof Array) {
-      v = deepcopy(v);
-    }
-    var set = function () {
-      return v;
-    };
-    return (new Array(n)).join('.').split('.').map(set);*/
   };
 
   /**
@@ -617,8 +610,8 @@
 
     diff: function (t1, t2, diffOptions) {
       diffcount = 0;
-      t1 = cleanCloneNode(t1);
-      t2 = cleanCloneNode(t2);
+      //t1 = cleanCloneNode(t1);
+      //t2 = cleanCloneNode(t2);
       if (this.debug) {
         this.t1Orig = nodeToObj(t1);
         this.t2Orig = nodeToObj(t2);

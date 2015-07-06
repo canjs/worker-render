@@ -1,9 +1,9 @@
 var can = require("can/util/util");
 var special = require("./globals/special");
 
-module.exports = function(ev){
-	var event = ev.data.event;
-	event.target = event.currentTarget = ev.target;
+module.exports = function(data){
+	var event = data.event;
+	event.target = event.currentTarget = self;
 
 	// Pre-conditions for global events.
 	if(special[event.type]) {

@@ -1,13 +1,18 @@
 var loader = require("@loader");
-var DiffDOM = require("../diff-dom");
 var domId = require("../dom-id");
 var elements = require("can/view/elements.js");
+var scheduleMaker = require("./scheduler");
 
+var DiffDOM = require("../diff-dom");
 var dd = new DiffDOM();
+
+var apply = require("dom-diff/patch");
+
 
 module.exports = function(main){
 
 	var worker = new Worker(loader.stealURL+"?main="+main);
+	var scheduleEvent = scheduleMaker(worker).scheduleEvent;
 
 	var globalEventHandler = function(ev){
 		worker.postMessage({
@@ -36,7 +41,7 @@ module.exports = function(main){
 				values = valueSetters[el.tagName](ev, el);
 			}
 
-			worker.postMessage({
+			scheduleEvent({
 				type: "event",
 				route: route,
 				event: extend({}, ev),
@@ -52,6 +57,7 @@ module.exports = function(main){
 			var diff = data.diff;
 
 			var el = domId.findNode(route);
+			//apply(el, diff, diffOptions);
 			dd.apply(el, diff, diffOptions);
 		},
 

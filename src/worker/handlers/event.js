@@ -1,12 +1,15 @@
 var domId = require("../../dom-id");
 var can = require("can/util/util");
 
-module.exports = function(ev){
-	var event = ev.data.event;
-	var el = domId.findNode(ev.data.route);
+/**
+ * DOM event handler
+ */
+module.exports = function(data){
+	var event = data.event;
+	var el = domId.findNode(data.route);
 	event.target = event.currentTarget = el;
 
-	var values = ev.data.values;
+	var values = data.values;
 	if(values) {
 		for(var p in values) {
 			el[p] = values[p];

@@ -3,6 +3,7 @@ var schedule = require("./scheduler").schedule;
 var syncDom = require("./sync-dom");
 var domId = require("../dom-id");
 var workerState = require("./state");
+var can = require("can");
 
 require("./overrides/insert");
 require("./overrides/attributes");
@@ -35,13 +36,25 @@ exports.startup = function(render){
 // The global message listener. Gets messages from the window and hands
 // them off to a handler.
 onmessage = function(ev){
-	var handler = handlers[ev.data.type];
-	if(handler) {
-		handler(ev);
+	var data = ev.data;
+
+	//can.batch.start();
+	if(Array.isArray(data)) {
+		data.forEach(runHandler);
 	} else {
-		console.warn("No handler for", ev.data.type);
+		runHandler(data);
 	}
+	//can.batch.stop();
 };
+
+function runHandler(data){
+	var handler = handlers[data.type];
+	if(handler) {
+		handler(data);
+	} else {
+		console.warn("No handler for", data.type);
+	}
+}
 
 // Tell the window that we're ready to start rendering.
 postMessage("start");

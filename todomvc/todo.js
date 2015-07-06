@@ -1,7 +1,7 @@
-var IDBModel = require("./can.indexeddb");
+var MemoryModel = require("./can.memory");
 
 // Basic Todo entry model
-var Todo = IDBModel.extend({
+var Todo = MemoryModel.extend({
 }, {
 	init: function () {
 		// Autosave when changing the text or completing the todo
