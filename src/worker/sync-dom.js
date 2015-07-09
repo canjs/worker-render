@@ -1,12 +1,9 @@
-var DiffDOM = require("../diff-dom");
-var domId = require("../dom-id");
+var domId = require("dom-diff/dom-id");
 var workerState = require("./state");
 
 var diff = require("dom-diff/diff");
 var apply = require("dom-diff/patch");
 var serialize = require("dom-diff/serialize");
-
-var dd = new DiffDOM();
 
 /**
  * @module can-worker/worker/sync-dom
@@ -19,7 +16,7 @@ var dd = new DiffDOM();
  */
 module.exports = function(route, newEl, force){
 	if(!workerState.firstRender && !force) {
-		return { diff: [] };
+		return null;
 	}
 
 	var diffStart = new Date();
@@ -27,15 +24,11 @@ module.exports = function(route, newEl, force){
 	// Diff and apply the old element.
 	var prevEl = domId.findNode(route, workerState.clonedDom);
 
-	/*var patches = diff(prevEl, newEl);
+	var patches = diff(prevEl, newEl);
 	var w = serialize(patches);
-	apply(prevEl, w);*/
-	var diff = dd.diff(prevEl, newEl);
-	dd.apply(prevEl, diff);
+	apply(prevEl, w, { root: workerState.clonedDom });
 
 	console.log("Diffed:", route, new Date() - diffStart);
 
-	return diff;
-
-	//return w;
+	return w;
 };

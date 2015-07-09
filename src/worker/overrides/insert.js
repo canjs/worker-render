@@ -1,5 +1,5 @@
 var schedule = require("../scheduler").schedule;
-var domId = require("../../dom-id");
+var domId = require("dom-diff/dom-id");
 var syncDom = require("../sync-dom");
 var Node = require("can-simple-dom/simple-dom/document/node")["default"];
 var markAsInDocument = require("./utils/mark_in_document");
@@ -33,7 +33,7 @@ function maybeRegisterElementForDiffing(child){
 
 		schedule(parent, function(route){
 			var diff = syncDom(route, parent);
-			if(diff.length) {
+			if(diff) {
 				return {
 					type: "diff",
 					diff: diff

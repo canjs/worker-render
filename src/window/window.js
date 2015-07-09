@@ -1,13 +1,9 @@
 var loader = require("@loader");
-var domId = require("../dom-id");
+var domId = require("dom-diff/dom-id");
 var elements = require("can/view/elements.js");
 var scheduleMaker = require("./scheduler");
 
-var DiffDOM = require("../diff-dom");
-var dd = new DiffDOM();
-
 var apply = require("dom-diff/patch");
-
 
 module.exports = function(main){
 
@@ -57,8 +53,8 @@ module.exports = function(main){
 			var diff = data.diff;
 
 			var el = domId.findNode(route);
-			//apply(el, diff, diffOptions);
-			dd.apply(el, diff, diffOptions);
+			apply(el, diff, diffOptions);
+			//dd.apply(el, diff, diffOptions);
 		},
 
 		text: function(data){

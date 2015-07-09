@@ -4,15 +4,15 @@ var can = require("can");
 var $ = require("jquery");
 var template = require("./index.stache!");
 
-//var worker = require("can-worker/worker/");
+var worker = require("can-worker/worker/");
 
-//worker.startup(function(){
+worker.startup(function(){
 
 	can.route(':filter');
 
-	var todoapp = $('section:first');
+	var todoapp = $($('section')[0]);
 	todoapp.html(template());
 
 	can.route.ready();
 
-//});
+});

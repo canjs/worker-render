@@ -1,4 +1,4 @@
-var domId = require("../dom-id");
+var domId = require("dom-diff/dom-id");
 require("setimmediate");
 
 var changedRoutes = {},

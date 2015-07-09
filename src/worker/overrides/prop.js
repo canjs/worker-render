@@ -1,5 +1,5 @@
 var schedule = require("../scheduler").schedule;
-var domId = require("../../dom-id");
+var domId = require("dom-diff/dom-id");
 var inDocument = require("./utils/in_document");
 var shouldDiff = require("./utils/should_diff");
 var Node = require("can-simple-dom/simple-dom/document/node")["default"];

@@ -1,7 +1,7 @@
 var handlers = require("./handlers/handlers");
 var schedule = require("./scheduler").schedule;
 var syncDom = require("./sync-dom");
-var domId = require("../dom-id");
+var domId = require("dom-diff/dom-id");
 var workerState = require("./state");
 var can = require("can");
 
@@ -39,11 +39,13 @@ onmessage = function(ev){
 	var data = ev.data;
 
 	//can.batch.start();
+	var start = new Date();
 	if(Array.isArray(data)) {
 		data.forEach(runHandler);
 	} else {
 		runHandler(data);
 	}
+	console.log("Took:", new Date() - start);
 	//can.batch.stop();
 };
 

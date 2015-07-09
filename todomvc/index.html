@@ -16,12 +16,24 @@
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
 		<script src="../node_modules/steal/steal.js" main="@empty">
-			//var canWorker = require("can-worker/window/");
-			//canWorker("todomvc/main");
-			require("todomvc/main");
+			var canWorker = require("can-worker/window/");
+			canWorker("todomvc/main");
 		</script>
 		<script>
 			document.getElementById("start-test").addEventListener("click", function(){
+				var start = new Date();
+
+				var intervalId = setInterval(function(){
+					var len = document.getElementById("todo-list").children.length;
+
+				}, 500);
+
+				function done() {
+					console.log("Took:", new Date() - start);
+
+					clearInterval(intervalId);
+				}
+
 				var numberOfItemsToAdd = 100;
 				for (var i = 0; i < numberOfItemsToAdd; i++) {
 					var newTodo = document.getElementById("new-todo");

@@ -8,7 +8,7 @@
 		<label for="toggle-all">Mark all as complete</label>
 		<ul id="todo-list">
 			{{#each displayList}}
-			<li class="todo{{#if complete}} completed{{/if}}{{#if editing}} editing{{/if}}">
+			<li id="todo-{{text}}" class="todo{{#if complete}} completed{{/if}}{{#if editing}} editing{{/if}}">
 				<div class="view">
 					<input class="toggle" type="checkbox" can-value="complete">
 					<label can-dblclick="edit">{{text}}</label>

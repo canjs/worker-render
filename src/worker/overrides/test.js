@@ -3,7 +3,7 @@ var can = require("can");
 var simpleDOM = require("can-simple-dom");
 require("can/util/vdom/build_fragment/");
 require("can/view/stache/");
-var domId = require("../../dom-id");
+var domId = require("dom-diff/dom-id");
 var markAsInDocument = require("./utils/mark_in_document");
 
 require("./insert");

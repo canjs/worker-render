@@ -1,6 +1,8 @@
 
 module.exports = markAsInDocument;
 
+var id = 0;
+
 function markAsInDocument(element){
 	var cur = element;
 
@@ -9,6 +11,9 @@ function markAsInDocument(element){
 			cur.inDocument = true;
 			if(cur.parentNode && cur.parentNode.dontDiff){
 				cur.dontDiff = true;
+			}
+			if(!cur.key) {
+				cur.key = ""+id++;
 			}
 		}
 		var child = cur.firstChild;
