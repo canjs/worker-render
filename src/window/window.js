@@ -3,6 +3,8 @@ var domId = require("dom-diff/dom-id");
 var elements = require("can/view/elements.js");
 var scheduleMaker = require("./scheduler");
 
+var deserialize = require("../node_serialization").deserialize;
+
 var apply = require("dom-diff/patch");
 
 module.exports = function(main){
@@ -75,6 +77,25 @@ module.exports = function(main){
 		globalEvent: function(data){
 			var fn = data.action === "add" ? "addEventListener" : "removeEventListener";
 			window[fn](data.name, globalEventHandler);
+		},
+
+		insert: function(data){
+			var node = deserialize(data.node, false, diffOptions);
+			var parent = domId.findNode(data.parent);
+
+			if(data.ref) {
+				var ref = domId.findNode(data.ref);
+				parent.insertBefore(node, ref);
+			} else {
+				parent.appendChild(node);
+			}
+		},
+
+		remove: function(data){
+			var parent = domId.findNode(data.parent);
+			var node = domId.findNode(data.route);
+
+			parent.removeChild(node);
 		}
 
 	};

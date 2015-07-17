@@ -13,7 +13,8 @@ exports.schedule = function schedule(el, callbackOrData){
 		changes.push(route);
 	}
 
-	changedRoutes[route] = callbackOrData;
+	var routeCallbacks = changedRoutes[route] || (changedRoutes[route] = []);
+	routeCallbacks.push(callbackOrData);
 
 	exports.scheduleFlush();
 };
@@ -42,21 +43,20 @@ exports.flushChanges = function flushChanges(){
 	console.log("Flushing:", changes);
 
 	changes.forEach(function(route){
-		var fn = changedRoutes[route];
-		//var route = change.route;
-		//var fn = change.callback;
+		var callbacks = changedRoutes[route];
 
-		if(typeof fn === "function") {
-			res = fn(route);
-		} else {
-			res = fn;
-		}
-		// Callbacks could return undefined which means do nothing.
-		if(res) {
-			res.route = route;
-			domChanges.push(res);
-		}
-
+		callbacks.forEach(function(fn){
+			if(typeof fn === "function") {
+				res = fn(route);
+			} else {
+				res = fn;
+			}
+			// Callbacks could return undefined which means do nothing.
+			if(res) {
+				res.route = route;
+				domChanges.push(res);
+			}
+		});
 	});
 
 	changedRoutes = {};

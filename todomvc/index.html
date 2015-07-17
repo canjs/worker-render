@@ -26,10 +26,13 @@
 				var intervalId = setInterval(function(){
 					var len = document.getElementById("todo-list").children.length;
 
-				}, 500);
+					if(len === 100) {
+						done();
+					}
+				}, 5);
 
 				function done() {
-					console.log("Took:", new Date() - start);
+					console.log("Todos took:", new Date() - start);
 
 					clearInterval(intervalId);
 				}

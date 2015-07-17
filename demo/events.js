@@ -1,6 +1,6 @@
 var can = require("can");
 var stache = require("can/view/stache/");
-var canWorker = require("can-worker/can-worker");
+var canWorker = require("can-worker/worker/");
 
 var template = stache("<a href='javascript://' can-click='toggle'>Click to toggle</a>" +
 	"{{#state}}<div can-click='log'>we have state</div>{{/state}}");
@@ -17,7 +17,7 @@ var State = can.Map.extend({
 
 var state = new State();
 
-canWorker.initialRender = function(){
+canWorker.startup(function(){
 	var frag = template(state);
 	document.body.appendChild(frag);
-};
+});

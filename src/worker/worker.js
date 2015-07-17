@@ -6,6 +6,7 @@ var workerState = require("./state");
 var can = require("can");
 
 require("./overrides/insert");
+require("./overrides/remove");
 require("./overrides/attributes");
 require("./overrides/prop");
 require("./overrides/events");
@@ -24,11 +25,11 @@ exports.startup = function(render){
 		// Call the initial render
 		render();
 
-		schedule(document.documentElement, function(path){
+		/*schedule(document.documentElement, function(path){
 			var diff = syncDom(path, document.documentElement, true);
 			workerState.firstRender = true;
 			return { type: "diff", diff: diff };
-		});
+		});*/
 
 	};
 };
@@ -45,7 +46,7 @@ onmessage = function(ev){
 	} else {
 		runHandler(data);
 	}
-	console.log("Took:", new Date() - start);
+	console.log("Rendering took:", new Date() - start);
 	//can.batch.stop();
 };
 
