@@ -1,4 +1,4 @@
-var NodeProp = require("dom-diff/types/node_prop");
+var NodeProp = require("./node_prop");
 
 exports.serialize = nodeToObject;
 
@@ -19,9 +19,10 @@ function nodeToObject(node){
 				objNode[NodeProp.ATTRIBUTES].push([node.attributes[i].name, node.attributes[i].value]);
 			}
 		}
-		if (node.childNodes && node.childNodes.length > 0) {
+		var cnlen = childNodesLength(node.childNodes);
+		if (node.childNodes && cnlen > 0) {
 			objNode[NodeProp.CHILD_NODES] = [];
-			for (i = 0; i < node.childNodes.length; i++) {
+			for (i = 0; i < cnlen; i++) {
 				objNode[NodeProp.CHILD_NODES].push(nodeToObject(node.childNodes.item(i)));
 			}
 		}
@@ -95,4 +96,13 @@ function objectToNode(objNode, insideSvg, diffOptions) {
 		}
 	}
 	return node;
+}
+
+function childNodesLength(childNodes){
+	var len = 0, cur = childNodes.node.firstChild;
+	while(cur) {
+		len++;
+		cur = cur.nextSibling;
+	}
+	return len;
 }

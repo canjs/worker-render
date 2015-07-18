@@ -1,11 +1,10 @@
 var loader = require("@loader");
-var domId = require("dom-diff/dom-id");
+var domId = require("can-worker/dom-id/");
 var elements = require("can/view/elements.js");
 var scheduleMaker = require("./scheduler");
 
 var deserialize = require("../node_serialization").deserialize;
 
-var apply = require("dom-diff/patch");
 
 module.exports = function(main){
 
@@ -49,15 +48,6 @@ module.exports = function(main){
 	};
 
 	var handlers = {
-
-		diff: function(data){
-			var route = data.route;
-			var diff = data.diff;
-
-			var el = domId.findNode(route);
-			apply(el, diff, diffOptions);
-			//dd.apply(el, diff, diffOptions);
-		},
 
 		text: function(data){
 			var node = domId.findNode(data.route);

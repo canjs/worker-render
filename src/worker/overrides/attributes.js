@@ -1,7 +1,6 @@
 var schedule = require("../scheduler").schedule;
 var Node = require("can-simple-dom/simple-dom/document/node")["default"];
 var inDocument = require("./utils/in_document");
-var shouldDiff = require("./utils/should_diff");
 
 var proto = Node.prototype;
 
@@ -13,7 +12,7 @@ proto.setAttribute = function(attr, value){
 };
 
 function scheduleIfInDocument(node, attributeName, attributeValue){
-	if(inDocument(node) && shouldDiff(node)) {
+	if(inDocument(node)) {
 		schedule(node, {
 			type: "attribute",
 			attr: attributeName,

@@ -1,9 +1,7 @@
 var schedule = require("../scheduler").schedule;
-var domId = require("dom-diff/dom-id");
-var syncDom = require("../sync-dom");
+var domId = require("can-worker/dom-id/");
 var Node = require("can-simple-dom/simple-dom/document/node")["default"];
 var markAsInDocument = require("./utils/mark_in_document");
-var shouldDiff = require("./utils/should_diff");
 
 var serialize = require("../../node_serialization").serialize;
 
@@ -25,7 +23,7 @@ proto.insertBefore = function(child, ref){
 
 function registerForDiff(child, ref){
 	var parent = nodeParent(child);
-	if(parent && parent.inDocument && shouldDiff(parent)) {
+	if(parent && parent.inDocument) {
 		markAsInDocument(child);
 
 
@@ -52,7 +50,7 @@ function registerForDiff(child, ref){
 }
 
 function nodeParent(child){
-	return child.nodeType === 11 ? child.firstChild.parentNode : child.parentNode;
+	return child.nodeType === 11 ? (child.firstChild && child.firstChild.parentNode) : child.parentNode;
 }
 
 function getChildren(el){

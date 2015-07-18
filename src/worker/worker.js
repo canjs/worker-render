@@ -1,9 +1,9 @@
 var handlers = require("./handlers/handlers");
 var schedule = require("./scheduler").schedule;
-var syncDom = require("./sync-dom");
-var domId = require("dom-diff/dom-id");
+var domId = require("can-worker/dom-id/");
 var workerState = require("./state");
 var can = require("can");
+var serialize = require("../../node_serialization").serialize;
 
 require("./overrides/insert");
 require("./overrides/remove");
@@ -24,13 +24,6 @@ exports.startup = function(render){
 
 		// Call the initial render
 		render();
-
-		/*schedule(document.documentElement, function(path){
-			var diff = syncDom(path, document.documentElement, true);
-			workerState.firstRender = true;
-			return { type: "diff", diff: diff };
-		});*/
-
 	};
 };
 

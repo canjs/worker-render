@@ -1,5 +1,8 @@
-var domId = require("dom-diff/dom-id");
+var domId = require("can-worker/dom-id/");
 require("setimmediate");
+
+var simpleDOM = require("can-simple-dom");
+var serializer = new simpleDOM.HTMLSerializer(simpleDOM.voidMap);
 
 var changedRoutes = {},
 	changes = [],
@@ -14,7 +17,7 @@ exports.schedule = function schedule(el, callbackOrData){
 	}
 
 	var routeCallbacks = changedRoutes[route] || (changedRoutes[route] = []);
-	routeCallbacks.push(callbackOrData);
+	routeCallbacks[0] = callbackOrData;
 
 	exports.scheduleFlush();
 };
@@ -40,8 +43,6 @@ exports.flushChanges = function flushChanges(){
 		domChanges.push(fn());
 	});
 
-	console.log("Flushing:", changes);
-
 	changes.forEach(function(route){
 		var callbacks = changedRoutes[route];
 
@@ -62,6 +63,8 @@ exports.flushChanges = function flushChanges(){
 	changedRoutes = {};
 	changes.length = 0;
 	globals.length = 0;
+
+	var html = serializer.serialize(document.documentElement);
 
 	postMessage(domChanges);
 

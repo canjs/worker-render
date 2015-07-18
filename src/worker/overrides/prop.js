@@ -1,7 +1,6 @@
 var schedule = require("../scheduler").schedule;
-var domId = require("dom-diff/dom-id");
+var domId = require("can-worker/dom-id/");
 var inDocument = require("./utils/in_document");
-var shouldDiff = require("./utils/should_diff");
 var Node = require("can-simple-dom/simple-dom/document/node")["default"];
 
 [
@@ -28,7 +27,7 @@ function watchProperty(info) {
 }
 
 function scheduleIfInDocument(node, prop, val, type){
-	if(inDocument(node.parentNode) && shouldDiff(node.parentNode)) {
+	if(inDocument(node.parentNode)) {
 		schedule(node, {
 			type: type,
 			prop: prop,

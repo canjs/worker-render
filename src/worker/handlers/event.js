@@ -1,4 +1,4 @@
-var domId = require("dom-diff/dom-id");
+var domId = require("can-worker/dom-id/");
 var can = require("can/util/util");
 
 /**
