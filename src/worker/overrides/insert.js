@@ -33,11 +33,10 @@ function registerForDiff(child, refIndex){
 			domId.purgeSiblings(child);
 		}
 
-		schedule(child, function(route){
+		schedule(parent, function(route){
 			return {
 				type: "insert",
 				node: serialize(child),
-				parent: domId.getID(parent),
 				ref: refIndex
 			};
 		});

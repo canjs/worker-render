@@ -72,7 +72,7 @@ module.exports = function(main){
 
 		insert: function(data){
 			var node = deserialize(data.node, false, diffOptions);
-			var parent = domId.findNode(data.parent);
+			var parent = domId.findNode(data.route);
 
 			if(data.ref) {
 				var ref = domId.findNode("0."+data.ref, parent);
@@ -83,9 +83,12 @@ module.exports = function(main){
 		},
 
 		remove: function(data){
-			var parent = domId.findNode(data.parent);
-			var node = domId.findNode(data.route);
+			var parent = domId.findNode(data.route);
+			var node = domId.findNode(data.child);
 
+			if(!node) {
+				return;
+			}
 			parent.removeChild(node);
 		}
 

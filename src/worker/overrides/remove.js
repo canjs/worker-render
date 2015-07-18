@@ -12,12 +12,9 @@ proto.removeChild = function(child){
 
 	if(inDocument(parent)) {
 
-		schedule(child, function(route){
-			return {
-				type: "remove",
-				parent: domId.getID(parent)
-			};
-
+		schedule(parent, {
+			type: "remove",
+			child: domId.getID(child)
 		});
 
 	}
