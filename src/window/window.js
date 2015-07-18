@@ -61,6 +61,7 @@ module.exports = function(main){
 
 		prop: function(data){
 			var el = domId.findNode(data.route);
+			if(!el) { return console.log("no", data.route); }
 			el[data.prop] = data.value;
 		},
 
@@ -74,7 +75,7 @@ module.exports = function(main){
 			var parent = domId.findNode(data.parent);
 
 			if(data.ref) {
-				var ref = domId.findNode(data.ref);
+				var ref = domId.findNode("0."+data.ref, parent);
 				parent.insertBefore(node, ref);
 			} else {
 				parent.appendChild(node);

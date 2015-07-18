@@ -1,8 +1,6 @@
 var handlers = require("./handlers/handlers");
 var schedule = require("./scheduler").schedule;
 var domId = require("can-worker/dom-id/");
-var workerState = require("./state");
-var can = require("can");
 var serialize = require("../../node_serialization").serialize;
 
 require("./overrides/insert");
@@ -32,15 +30,11 @@ exports.startup = function(render){
 onmessage = function(ev){
 	var data = ev.data;
 
-	//can.batch.start();
-	var start = new Date();
 	if(Array.isArray(data)) {
 		data.forEach(runHandler);
 	} else {
 		runHandler(data);
 	}
-	console.log("Rendering took:", new Date() - start);
-	//can.batch.stop();
 };
 
 function runHandler(data){

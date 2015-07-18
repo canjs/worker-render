@@ -97,6 +97,20 @@ function getBranch(index, element, parentBranch) {
 	return branch;
 }
 
+exports.indexOfParent = function indexOfParent(parent, node){
+	var index = -1;
+
+	var child = parent.firstChild;
+	while(child) {
+		index++;
+		if(child === node) {
+			break;
+		}
+		child = child.nextSibling;
+	}
+	return index;
+};
+
 /**
  * Generates the route for a particular node, caching the intermediate nodes
  * along the way.

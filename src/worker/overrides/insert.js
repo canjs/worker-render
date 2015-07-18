@@ -2,6 +2,7 @@ var schedule = require("../scheduler").schedule;
 var domId = require("can-worker/dom-id/");
 var Node = require("can-simple-dom/simple-dom/document/node")["default"];
 var markAsInDocument = require("./utils/mark_in_document");
+var inDocument = require("./utils/in_document");
 
 var serialize = require("../../node_serialization").serialize;
 
@@ -16,16 +17,16 @@ proto.appendChild = function(child){
 
 var insertBefore = proto.insertBefore;
 proto.insertBefore = function(child, ref){
+	var refIndex = domId.indexOfParent(this, ref);
 	var res = insertBefore.apply(this, arguments);
-	registerForDiff(child, ref);
+	registerForDiff(child, refIndex);
 	return res;
 };
 
-function registerForDiff(child, ref){
+function registerForDiff(child, refIndex){
 	var parent = nodeParent(child);
-	if(parent && parent.inDocument) {
+	if(inDocument(parent)) {
 		markAsInDocument(child);
-
 
 		if(child.nodeType === 1) {
 			domId.getID(child);
@@ -33,16 +34,11 @@ function registerForDiff(child, ref){
 		}
 
 		schedule(child, function(route){
-			var refId;
-			if(ref) {
-				refId = domId.getID(ref);
-			}
-
 			return {
 				type: "insert",
 				node: serialize(child),
 				parent: domId.getID(parent),
-				ref: refId
+				ref: refIndex
 			};
 		});
 	}

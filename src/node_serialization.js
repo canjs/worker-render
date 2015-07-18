@@ -106,3 +106,15 @@ function childNodesLength(childNodes){
 	}
 	return len;
 }
+
+window.childNodes = function(cn){
+	var arr = [], cur = cn.node.firstChild;
+	while(cur) {
+		arr.push(cur);
+		cur = cur.nextSibling;
+	}
+	return arr;
+
+};
+
+window.childNodesLength = childNodesLength;
