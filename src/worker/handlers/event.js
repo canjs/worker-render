@@ -1,4 +1,4 @@
-var domId = require("can-worker/dom-id/");
+var nodeRoute = require("node-route");
 var can = require("can/util/util");
 
 /**
@@ -6,7 +6,7 @@ var can = require("can/util/util");
  */
 module.exports = function(data){
 	var event = data.event;
-	var el = domId.findNode(data.route);
+	var el = nodeRoute.findNode(data.route);
 	event.target = event.currentTarget = el;
 
 	var values = data.values;

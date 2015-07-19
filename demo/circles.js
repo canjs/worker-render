@@ -1,6 +1,6 @@
-steal("can/view/stache", "can-worker/worker", function(stache, canWorker){
+steal("can/view/stache", "worker-render/worker", function(stache, renderer){
 
-	canWorker.startup(render);
+	renderer.ready(render);
 
 	var template = stache(
 		"<button can-click='start'>Start</button>" +

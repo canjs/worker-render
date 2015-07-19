@@ -4,9 +4,9 @@ var scheduleMaker = require("./scheduler");
 var applyPatches = require("dom-patch/apply");
 
 
-module.exports = function(main){
+exports.updateWith = updateWith;
 
-	var worker = new Worker(loader.stealURL+"?main="+main);
+function updateWith(worker){
 	var scheduleEvent = scheduleMaker(worker).scheduleEvent;
 
 	var globalEventHandler = function(ev){
@@ -72,4 +72,4 @@ module.exports = function(main){
 		}
 		return a;
 	}
-};
+}

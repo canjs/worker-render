@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>CanJS • TodoMVC</title>
-		<link rel="stylesheet" href="../node_modules/todomvc-common/base.css">
-		<link rel="stylesheet" href="../node_modules/todomvc-app-css/index.css">
+		<link rel="stylesheet" href="../../node_modules/todomvc-common/base.css">
+		<link rel="stylesheet" href="../../node_modules/todomvc-app-css/index.css">
 	</head>
 	<body>
 		<button id="start-test" type="button">Start testing</button>
@@ -15,9 +15,11 @@
 			<p>Written by <a href="http://bitovi.com">Bitovi</a></p>
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
-		<script src="../node_modules/steal/steal.js" main="@empty">
-			var canWorker = require("can-worker/window/");
-			canWorker("todomvc/main");
+		<script src="../../node_modules/steal/steal.js" main="@empty">
+			var worker = new Worker(System.stealURL+"?main=demo/todomvc/main");
+
+			var window = require("worker-render/window");
+			window.updateWith(worker);
 		</script>
 		<script>
 			document.getElementById("start-test").addEventListener("click", function(){

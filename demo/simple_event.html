@@ -1,4 +1,6 @@
 <script src="../node_modules/steal/steal.js">
-	var workerRendering = require("can-worker/window/");
-	workerRendering("demo/events");
+	var worker = new Worker(System.stealURL+"?main=demo/events");
+
+	var window = require("worker-render/window");
+	window.updateWith(worker);
 </script>

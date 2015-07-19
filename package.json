@@ -1,16 +1,24 @@
 {
-  "name": "can-worker",
-  "version": "0.0.1",
+  "name": "worker-render",
+  "version": "1.0.0",
   "description": "Run CanJS apps in a WebWorker",
   "main": "dist/cjs/window/window.js",
   "scripts": {
     "test": "testee test/test.html --browsers firefox --reporter Spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canjs/worker-render.git"
   },
   "keywords": [
     "CanJS"
   ],
   "author": "Bitovi",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/canjs/worker-render/issues"
+  },
+  "homepage": "https://github.com/canjs/worker-render#readme",
   "devDependencies": {
     "steal": "^0.10.5",
     "steal-qunit": "0.0.4",

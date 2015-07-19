@@ -2,12 +2,18 @@ var handlers = require("./handlers/handlers");
 var patch = require("dom-patch");
 
 /**
- * @function startup
+ * @module worker-render/worker worker
+ *
+ * A module that runs in a Worker thread doing DOM updates.
+ */
+
+/**
+ * @function worker-render/worker.ready ready
  * @param {Function} render
  *
  * Startup the worker to do the initial render
  */
-exports.startup = function(render){
+exports.ready = function(render){
 	var initial = handlers.initial;
 	handlers.initial = function(){
 		initial.apply(this, arguments);
