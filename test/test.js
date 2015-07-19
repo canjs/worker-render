@@ -1,7 +1,7 @@
 var QUnit = require("steal-qunit");
 var F = require("funcunit");
 
-QUnit.config.testTimeout = 10000;
+QUnit.config.testTimeout = 30000;
 
 F.attach(QUnit);
 
