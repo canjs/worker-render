@@ -1,9 +1,7 @@
 var loader = require("@loader");
-var domId = require("can-worker/dom-id/");
-var elements = require("can/view/elements.js");
+var nodeRoute = require("node-route");
 var scheduleMaker = require("./scheduler");
-
-var deserialize = require("../node_serialization").deserialize;
+var applyPatches = require("dom-patch/apply");
 
 
 module.exports = function(main){
@@ -28,10 +26,12 @@ module.exports = function(main){
 		}
 	};
 
-	var diffOptions = {
+	var patchOptions = {
+		globalEventHandler: globalEventHandler,
+
 		eventHandler: function(ev){
 			var el = ev.target;
-			var route = domId.getID(el);
+			var route = nodeRoute.getID(el);
 			var values;
 
 			if(valueSetters[el.tagName]) {
@@ -47,53 +47,6 @@ module.exports = function(main){
 		}
 	};
 
-	var handlers = {
-
-		text: function(data){
-			var node = domId.findNode(data.route);
-			node.nodeValue = data.value;
-		},
-
-		attribute: function(data){
-			var el = domId.findNode(data.route);
-			elements.setAttr(el, data.attr, data.value);
-		},
-
-		prop: function(data){
-			var el = domId.findNode(data.route);
-			if(!el) { return console.log("no", data.route); }
-			el[data.prop] = data.value;
-		},
-
-		globalEvent: function(data){
-			var fn = data.action === "add" ? "addEventListener" : "removeEventListener";
-			window[fn](data.name, globalEventHandler);
-		},
-
-		insert: function(data){
-			var node = deserialize(data.node, false, diffOptions);
-			var parent = domId.findNode(data.route);
-
-			if(data.ref) {
-				var ref = domId.findNode("0."+data.ref, parent);
-				parent.insertBefore(node, ref);
-			} else {
-				parent.appendChild(node);
-			}
-		},
-
-		remove: function(data){
-			var parent = domId.findNode(data.route);
-			var node = domId.findNode(data.child);
-
-			if(!node) {
-				return;
-			}
-			parent.removeChild(node);
-		}
-
-	};
-
 	worker.onmessage = function(ev){
 		if(ev.data === "start"){
 			worker.postMessage({
@@ -104,11 +57,8 @@ module.exports = function(main){
 			return;
 		}
 
-		var changes = ev.data;
-		changes.forEach(function(data){
-			// Apply the change
-			handlers[data.type](data);
-		});
+		var patches = ev.data;
+		applyPatches(document, patches, patchOptions);
 	};
 
 	// A simple extend that doesn't go deep

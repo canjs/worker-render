@@ -1,6 +1,5 @@
 var route = require("can/route/route");
 var Location = require("micro-location");
-var markAsInDocument = require("../overrides/utils/mark_in_document");
 
 module.exports = function(data){
 	route.location = Location.parse(data.location);
@@ -17,6 +16,4 @@ module.exports = function(data){
 		}
 		return null;
 	})();
-
-	markAsInDocument(docEl);
 };

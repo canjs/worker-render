@@ -1,13 +1,5 @@
 var handlers = require("./handlers/handlers");
-var schedule = require("./scheduler").schedule;
-var domId = require("can-worker/dom-id/");
-var serialize = require("../../node_serialization").serialize;
-
-require("./overrides/insert");
-require("./overrides/remove");
-require("./overrides/attributes");
-require("./overrides/prop");
-require("./overrides/events");
+var patch = require("dom-patch");
 
 /**
  * @function startup
@@ -19,6 +11,12 @@ exports.startup = function(render){
 	var initial = handlers.initial;
 	handlers.initial = function(){
 		initial.apply(this, arguments);
+
+		// Listen for changes in the document and call postMessage
+		// with the patches that will be applied on the other side.
+		patch(document, function(patches){
+			postMessage(patches);
+		});
 
 		// Call the initial render
 		render();
