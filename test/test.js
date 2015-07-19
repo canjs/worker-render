@@ -12,10 +12,10 @@ QUnit.module("worker-render", {
 });
 
 QUnit.test("does initial render", function(){
-	F("[can-click=toggle]").exists("The link renders");
+	F("[can-click='toggle']").exists("The link renders");
 });
 
 QUnit.test("Event handlers work", function(){
-	F("[can-click=toggle]").exists().click();
-	F("[can-click=log]").exists("The span was rendered");
+	F("[can-click='toggle']").exists().click();
+	F("[can-click='log']").exists("The span was rendered");
 });
