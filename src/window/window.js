@@ -1,4 +1,3 @@
-var loader = require("@loader");
 var nodeRoute = require("node-route");
 var scheduleMaker = require("./scheduler");
 var applyPatches = require("dom-patch/apply");
