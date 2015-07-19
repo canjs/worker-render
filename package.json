@@ -5,7 +5,6 @@
   "main": "dist/cjs/window/window.js",
   "scripts": {
     "build": "node build.js",
-    "prepublish": "node build.js",
     "test": "testee test/test.html --browsers firefox --reporter Spec"
   },
   "repository": {
