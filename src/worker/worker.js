@@ -1,35 +1,31 @@
 var handlers = require("./handlers/handlers");
-var schedule = require("./scheduler").schedule;
-var syncDom = require("./sync-dom");
-var domId = require("dom-diff/dom-id");
-var workerState = require("./state");
-var can = require("can");
-
-require("./overrides/insert");
-require("./overrides/attributes");
-require("./overrides/prop");
-require("./overrides/events");
+var patch = require("dom-patch");
 
 /**
- * @function startup
+ * @module worker-render/worker worker
+ *
+ * A module that runs in a Worker thread doing DOM updates.
+ */
+
+/**
+ * @function worker-render/worker.ready ready
  * @param {Function} render
  *
  * Startup the worker to do the initial render
  */
-exports.startup = function(render){
+exports.ready = function(render){
 	var initial = handlers.initial;
 	handlers.initial = function(){
 		initial.apply(this, arguments);
 
-		// Call the initial render
-		render();
-
-		schedule(document.documentElement, function(path){
-			var diff = syncDom(path, document.documentElement, true);
-			workerState.firstRender = true;
-			return { type: "diff", diff: diff };
+		// Listen for changes in the document and call postMessage
+		// with the patches that will be applied on the other side.
+		patch(document, function(patches){
+			postMessage(patches);
 		});
 
+		// Call the initial render
+		render();
 	};
 };
 
@@ -38,15 +34,11 @@ exports.startup = function(render){
 onmessage = function(ev){
 	var data = ev.data;
 
-	//can.batch.start();
-	var start = new Date();
 	if(Array.isArray(data)) {
 		data.forEach(runHandler);
 	} else {
 		runHandler(data);
 	}
-	console.log("Took:", new Date() - start);
-	//can.batch.stop();
 };
 
 function runHandler(data){

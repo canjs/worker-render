@@ -1,29 +1,40 @@
 {
-  "name": "can-worker",
-  "version": "0.0.1",
+  "name": "worker-render",
+  "version": "1.0.0",
   "description": "Run CanJS apps in a WebWorker",
   "main": "dist/cjs/window/window.js",
   "scripts": {
+    "build": "node build.js",
+    "prepublish": "node build.js",
     "test": "testee test/test.html --browsers firefox --reporter Spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canjs/worker-render.git"
   },
   "keywords": [
     "CanJS"
   ],
   "author": "Bitovi",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/canjs/worker-render/issues"
+  },
+  "homepage": "https://github.com/canjs/worker-render#readme",
   "devDependencies": {
+    "funcunit": "^3.0.0",
+    "jquery": "^2.1.4",
     "steal": "^0.10.5",
     "steal-qunit": "0.0.4",
+    "steal-tools": "^0.10.7",
     "testee": "^0.2.0",
     "todomvc-app-css": "^1.0.1",
     "todomvc-common": "^1.0.2"
   },
   "dependencies": {
     "can": "^2.3.0-pre.1",
-    "dom-diff": "0.0.1",
-    "jquery": "^2.1.4",
-    "micro-location": "^0.1.4",
-    "setimmediate": "^1.0.2"
+    "dom-patch": "^0.3.1",
+    "micro-location": "^0.1.4"
   },
   "system": {
     "main": "window/window",
@@ -32,6 +43,9 @@
     },
     "configDependencies": [
       "system-config"
+    ],
+    "npmIgnore": [
+      "testee"
     ]
   }
 }

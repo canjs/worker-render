@@ -4,9 +4,9 @@ var can = require("can");
 var $ = require("jquery");
 var template = require("./index.stache!");
 
-var worker = require("can-worker/worker/");
+var worker = require("worker-render/worker");
 
-worker.startup(function(){
+worker.ready(function(){
 
 	can.route(':filter');
 

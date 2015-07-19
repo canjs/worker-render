@@ -45,8 +45,10 @@
 <button id='stop'>Stop</button>-->
 <div id='timing'></div>
 <script type="text/javascript" src="../node_modules/steal/steal.js" main="@empty">
-	var canWorker = require("can-worker/window/");
-	canWorker("demo/circles");
+	var worker = new Worker(System.stealURL+"?main=demo/circles");
+
+	var window = require("worker-render/window");
+	window.updateWith(worker);
 </script>
 </body>
 </html>

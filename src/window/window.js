@@ -1,13 +1,12 @@
 var loader = require("@loader");
-var domId = require("dom-diff/dom-id");
-var elements = require("can/view/elements.js");
+var nodeRoute = require("node-route");
 var scheduleMaker = require("./scheduler");
+var applyPatches = require("dom-patch/apply");
 
-var apply = require("dom-diff/patch");
 
-module.exports = function(main){
+exports.updateWith = updateWith;
 
-	var worker = new Worker(loader.stealURL+"?main="+main);
+function updateWith(worker){
 	var scheduleEvent = scheduleMaker(worker).scheduleEvent;
 
 	var globalEventHandler = function(ev){
@@ -27,10 +26,12 @@ module.exports = function(main){
 		}
 	};
 
-	var diffOptions = {
+	var patchOptions = {
+		globalEventHandler: globalEventHandler,
+
 		eventHandler: function(ev){
 			var el = ev.target;
-			var route = domId.getID(el);
+			var route = nodeRoute.getID(el);
 			var values;
 
 			if(valueSetters[el.tagName]) {
@@ -46,39 +47,6 @@ module.exports = function(main){
 		}
 	};
 
-	var handlers = {
-
-		diff: function(data){
-			var route = data.route;
-			var diff = data.diff;
-
-			var el = domId.findNode(route);
-			apply(el, diff, diffOptions);
-			//dd.apply(el, diff, diffOptions);
-		},
-
-		text: function(data){
-			var node = domId.findNode(data.route);
-			node.nodeValue = data.value;
-		},
-
-		attribute: function(data){
-			var el = domId.findNode(data.route);
-			elements.setAttr(el, data.attr, data.value);
-		},
-
-		prop: function(data){
-			var el = domId.findNode(data.route);
-			el[data.prop] = data.value;
-		},
-
-		globalEvent: function(data){
-			var fn = data.action === "add" ? "addEventListener" : "removeEventListener";
-			window[fn](data.name, globalEventHandler);
-		}
-
-	};
-
 	worker.onmessage = function(ev){
 		if(ev.data === "start"){
 			worker.postMessage({
@@ -89,11 +57,8 @@ module.exports = function(main){
 			return;
 		}
 
-		var changes = ev.data;
-		changes.forEach(function(data){
-			// Apply the change
-			handlers[data.type](data);
-		});
+		var patches = ev.data;
+		applyPatches(document, patches, patchOptions);
 	};
 
 	// A simple extend that doesn't go deep
@@ -107,4 +72,4 @@ module.exports = function(main){
 		}
 		return a;
 	}
-};
+}
