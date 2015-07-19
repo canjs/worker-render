@@ -4,6 +4,8 @@
   "description": "Run CanJS apps in a WebWorker",
   "main": "dist/cjs/window/window.js",
   "scripts": {
+    "build": "node build.js",
+    "prepublish": "node build.js",
     "test": "testee test/test.html --browsers firefox --reporter Spec"
   },
   "repository": {
@@ -22,16 +24,16 @@
   "devDependencies": {
     "steal": "^0.10.5",
     "steal-qunit": "0.0.4",
+    "steal-tools": "^0.10.7",
     "testee": "^0.2.0",
     "todomvc-app-css": "^1.0.1",
-    "todomvc-common": "^1.0.2"
+    "todomvc-common": "^1.0.2",
+    "jquery": "^2.1.4"
   },
   "dependencies": {
     "can": "^2.3.0-pre.1",
     "dom-patch": "^0.3.1",
-    "jquery": "^2.1.4",
-    "micro-location": "^0.1.4",
-    "setimmediate": "^1.0.2"
+    "micro-location": "^0.1.4"
   },
   "system": {
     "main": "window/window",
