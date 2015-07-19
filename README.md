@@ -1,6 +1,5 @@
 # worker-render
 
-[![Build Status](https://travis-ci.org/canjs/worker-render.svg?branch=master)](https://travis-ci.org/canjs/worker-render)
 [![npm version](https://badge.fury.io/js/worker-render.svg)](http://badge.fury.io/js/worker-render)
 
 Run your applications in a WebWorker and have changes automatically update the DOM.
