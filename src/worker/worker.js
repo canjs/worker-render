@@ -16,13 +16,18 @@ var patch = require("dom-patch");
 exports.ready = function(render){
 	var initial = handlers.initial;
 	handlers.initial = function(){
-		initial.apply(this, arguments);
+		var afterPatch = initial.apply(this, arguments);
 
 		// Listen for changes in the document and call postMessage
 		// with the patches that will be applied on the other side.
 		patch(document, function(patches){
 			postMessage(patches);
 		});
+
+		// initial returns a function that will patch back in elements
+		// that were inserted before the initial HTML had been rendered
+		// in the worker DOM.
+		afterPatch();
 
 		// Call the initial render
 		render();

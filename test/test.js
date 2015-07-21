@@ -5,7 +5,18 @@ QUnit.config.testTimeout = 30000;
 
 F.attach(QUnit);
 
-QUnit.module("worker-render", {
+QUnit.module("worker-render basics", {
+	setup: function(){
+		F.open("//basics/index.html");
+	}
+});
+
+QUnit.test("renders an element with css", function(){
+	F("span").exists().text(/Hello world/, "span rendered correctly");
+	F("style").exists("style tag added to the window DOM");
+});
+
+QUnit.module("worker-render events", {
 	setup: function(){
 		F.open("//../demo/simple_event.html");
 	}

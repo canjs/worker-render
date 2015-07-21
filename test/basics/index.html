@@ -1,0 +1,6 @@
+<script src="../../node_modules/steal/steal.js">
+	var worker = new Worker(System.stealURL+"?main=test/basics/basics");
+
+	var windowRender = require("worker-render/window");
+	windowRender.updateWith(worker);
+</script>
