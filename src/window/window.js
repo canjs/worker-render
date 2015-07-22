@@ -15,6 +15,10 @@ function updateWith(worker){
 		});
 	};
 
+	var handlers = {
+		ack: eventHandler.acknowledge
+	};
+
 	var patchOptions = {
 		globalEventHandler: globalEventHandler,
 
@@ -28,6 +32,12 @@ function updateWith(worker){
 				content: document.documentElement.innerHTML,
 				location: location.toString()
 			});
+			return;
+		}
+
+		var handler = handlers[ev.data.type];
+		if(handler) {
+			handler(ev.data);
 			return;
 		}
 

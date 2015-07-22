@@ -11,9 +11,18 @@ var valueSetters = {
 	}
 };
 
+var doPreventDefault = {
+	click: true
+};
 
 module.exports = function(worker){
-	return function(ev){
+	var pendingEvents = {}, id = 0;
+
+	var eventHandler = function(ev){
+		if(ev.defaultPrevented) {
+			return;
+		}
+
 		var el = ev.target;
 		var route = nodeRoute.getID(el);
 		var values;
@@ -22,11 +31,39 @@ module.exports = function(worker){
 			values = valueSetters[el.tagName](ev, el);
 		}
 
+		var eventObject = extend({}, ev);
+
+		if(doPreventDefault[ev.type]) {
+			if(id < 100) {
+				id++;
+			} else {
+				id = 0;
+			}
+
+			pendingEvents[id] = ev;
+			ev.preventDefault();
+		}
+
 		worker.postMessage({
 			type: "event",
 			route: route,
-			event: extend({}, ev),
-			values: values
+			event: eventObject,
+			values: values,
+			id: id
 		});
 	};
+
+	eventHandler.acknowledge = acknowledge;
+
+	function acknowledge(data){
+		var event = pendingEvents[data.id];
+		delete pendingEvents[data.id];
+
+		if(event && !data.defaultPrevented) {
+			event.initEvent(event.type, true, false);
+			event.target.dispatchEvent(event);
+		}
+	}
+
+	return eventHandler;
 };

@@ -16,5 +16,17 @@ module.exports = function(data){
 		}
 	}
 
+	// Override preventDefault so that we know when the event was stopped.
+	event.preventDefault = function(){
+		event.defaultPrevented = true;
+	};
+
 	can.trigger(el, event);
+
+	// Send back an ack so that the window side can retrigger the event.
+	postMessage({
+		type: "ack",
+		id: data.id,
+		defaultPrevented: event.defaultPrevented
+	});
 };

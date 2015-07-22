@@ -7,7 +7,7 @@ var template = stache("<a href='javascript://' can-click='toggle'>Click to toggl
 
 var State = can.Map.extend({
 	state: false,
-	toggle: function(){
+	toggle: function(viewModel, el, event){
 		this.attr("state", !this.attr("state"));
 	},
 	log: function(){
