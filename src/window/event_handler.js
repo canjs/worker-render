@@ -60,7 +60,6 @@ module.exports = function(worker){
 		delete pendingEvents[data.id];
 
 		if(event && !data.defaultPrevented) {
-			event.initEvent(event.type, true, false);
 			event.target.dispatchEvent(event);
 		}
 	}
