@@ -1,7 +1,7 @@
 var nodeRoute = require("node-route");
 var applyPatches = require("dom-patch/apply");
 var makeEventHandler = require("./event_handler");
-var extend = require("./simple_extend");
+var extend = require("../simple_extend");
 
 exports.updateWith = updateWith;
 

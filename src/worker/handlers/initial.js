@@ -1,8 +1,9 @@
-var route = require("can/route/route");
 var Location = require("micro-location");
+var extend = require("../../simple_extend");
 
 module.exports = function(data){
-	route.location = Location.parse(data.location);
+	var newLocation = Location.parse(data.location);
+	extend(window.location, newLocation);
 	var docEl = document.documentElement;
 
 	// Keep the contents inside the <head> because they might have

@@ -1,4 +1,4 @@
-var extend = require("./simple_extend");
+var extend = require("../simple_extend");
 var nodeRoute = require("node-route");
 
 var valueSetters = {
@@ -8,6 +8,9 @@ var valueSetters = {
 		} else {
 			return { value: el.value };
 		}
+	},
+	SELECT: function(ev, el){
+		return { value: el.value };
 	}
 };
 
@@ -33,7 +36,7 @@ module.exports = function(worker){
 
 		var eventObject = extend({}, ev);
 
-		if(doPreventDefault[ev.type]) {
+		/*if(doPreventDefault[ev.type]) {
 			if(id < 100) {
 				id++;
 			} else {
@@ -42,7 +45,7 @@ module.exports = function(worker){
 
 			pendingEvents[id] = ev;
 			ev.preventDefault();
-		}
+		}*/
 
 		worker.postMessage({
 			type: "event",

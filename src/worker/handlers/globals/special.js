@@ -1,5 +1,5 @@
-var route = require("can/route/route");
 var Location = require("micro-location");
+var extend = require("../../../simple_extend");
 
 /**
  * @function hashchange
@@ -8,5 +8,6 @@ var Location = require("micro-location");
  * Preprocessor for hashchange events
  */
 exports.hashchange = function(event){
-	route.location = Location.parse(event.newURL);
+	var newLocation = Location.parse(event.newURL);
+	extend(window.location, newLocation);
 };
