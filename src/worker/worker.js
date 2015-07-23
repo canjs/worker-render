@@ -1,6 +1,10 @@
 var handlers = require("./handlers/handlers");
 var patch = require("dom-patch");
 
+var overrides = [
+	require("./overrides/history")
+];
+
 /**
  * @module worker-render/worker worker
  *
@@ -22,6 +26,11 @@ exports.ready = function(render){
 		// with the patches that will be applied on the other side.
 		patch(document, function(patches){
 			postMessage(patches);
+		});
+
+		// Apply all overrides
+		overrides.forEach(function(fn){
+			fn(document);
 		});
 
 		// initial returns a function that will patch back in elements

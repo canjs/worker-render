@@ -6,7 +6,7 @@ var can = require("can/util/util");
  */
 module.exports = function(data){
 	var event = data.event;
-	event.target = nodeRoute.findNode(event.target);
+	var el = event.target = nodeRoute.findNode(event.target);
 	event.currentTarget = nodeRoute.findNode(event.currentTarget);
 
 	var values = data.values;
