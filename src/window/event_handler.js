@@ -15,7 +15,8 @@ var valueSetters = {
 };
 
 var doPreventDefault = {
-	click: true
+	click: true,
+	submit: true
 };
 
 module.exports = function(worker){
@@ -36,7 +37,7 @@ module.exports = function(worker){
 
 		var eventObject = extend({}, ev);
 
-		/*if(doPreventDefault[ev.type]) {
+		if(doPreventDefault[ev.type]) {
 			if(id < 100) {
 				id++;
 			} else {
@@ -45,7 +46,7 @@ module.exports = function(worker){
 
 			pendingEvents[id] = ev;
 			ev.preventDefault();
-		}*/
+		}
 
 		worker.postMessage({
 			type: "event",

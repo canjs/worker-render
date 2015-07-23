@@ -30,3 +30,8 @@ QUnit.test("Event handlers work", function(){
 	F("[can-click='toggle']").exists().click();
 	F("[can-click='log']").exists("The span was rendered");
 });
+
+QUnit.test("Push state works", function(){
+	F("a").exists().click();
+	F("h4").exists("h4 added to the page, page didn't change");
+});
