@@ -6,8 +6,8 @@ var can = require("can/util/util");
  */
 module.exports = function(data){
 	var event = data.event;
-	var el = nodeRoute.findNode(data.route);
-	event.target = event.currentTarget = el;
+	event.target = nodeRoute.findNode(event.target);
+	event.currentTarget = nodeRoute.findNode(event.currentTarget);
 
 	var values = data.values;
 	if(values) {
@@ -21,7 +21,7 @@ module.exports = function(data){
 		event.defaultPrevented = true;
 	};
 
-	can.trigger(el, event);
+	can.trigger(event.currentTarget, event);
 
 	// Send back an ack so that the window side can retrigger the event.
 	postMessage({

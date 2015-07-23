@@ -36,6 +36,10 @@ module.exports = function(worker){
 		}
 
 		var eventObject = extend({}, ev);
+		extend(eventObject, {
+			target: nodeRoute.getID(ev.target),
+			currentTarget: nodeRoute.getID(ev.currentTarget)
+		});
 
 		if(doPreventDefault[ev.type]) {
 			if(id < 100) {
