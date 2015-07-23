@@ -1,6 +1,6 @@
 {
   "name": "worker-render",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Run CanJS apps in a WebWorker",
   "main": "dist/cjs/window/window.js",
   "scripts": {
