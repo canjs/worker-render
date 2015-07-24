@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en">
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie lt-ie9" lang="en">
+<![endif]-->
+<!--[if IE 9]>
+<html class="no-js ie ie9" lang="en">
+<![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>worker-render  - readme</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	
+	<link rel="stylesheet" type="text/css" href="./static/bundles/static.css">
+	
+	<!--[if lt IE 9]>
+   <script type="text/javascript" src="static/html5shiv.js"></script>
+    <!--<![endif]-->
+</head>
+
+<body class="docs">
+	<header>
+		<nav class="container">
+
+			<div class="logo-menu">
+				<a class="brand" href="./index.html">worker-render</a>
+			</div>
+
+			<div class="pull-right">
+				<div class="bitovi-menu">
+					<a href="http://bitovi.com" class="bitovi icon-bits">Bitovi</a>
+					<ul class="dropdown-menu">
+						<li><a href="http://bitovi.com">Bitovi.com</a></li>
+						<li><a href="http://bitovi.com/blog/">Blog</a></li>
+						<li><a href="http://bitovi.com/consulting/">Consulting</a></li>
+						<li><a href="http://bitovi.com/training/">Training</a></li>
+						<li><a href="http://bitovi.com/open-source/">Open Source</a></li>
+						<li><a href="http://bitovi.com/people/">People</a></li>
+						<li><a href="http://bitovi.com/contact/">Contact Us</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	
+<div class="container api">
+
+	
+	<nav class="sidebar">
+		
+		<ul class="api cascading primary-grouping"> 
+	
+		
+		<li class="search-container active parent">
+			<a class="sidebar-title" href="index.html" data-search="worker-render">
+				worker-render
+			</a>
+			
+		</li>
+		
+		
+			
+			<li class="search-container active">
+			<a class="sidebar-title" href="readme.html" data-search="readme">
+				readme
+			</a>
+			
+		</li>
+			
+		
+	
+</ul>
+	</nav>
+	
+	
+	
+	<article class="content docs">
+	
+	
+		
+		<section class="title">
+			<div class="heading">
+<h1>readme</h1>
+	<ul class="tags">
+		<li>page</li>
+	</ul>
+	
+	
+</div>
+
+<div class="sub-heading">
+	
+	
+	<span class="inherits">&nbsp;</span>
+</div>
+
+<ul class="links">
+	
+	
+		<li><a href="git://github.com/canjs/can-connect#masterreadme.md">source</a></li>
+	
+	
+	
+</ul>
+<br />
+		</section>
+		
+		
+		
+		<section class="contents">
+		</section>
+		
+		
+		
+
+		
+		<section class="description">
+			<h1>worker-render</h1>
+
+		</section>
+		
+
+		
+			
+		
+		
+		
+		
+
+		
+		<section class="comment">
+			<p><a href="http://badge.fury.io/js/worker-render"><img src="https://badge.fury.io/js/worker-render.svg" alt="npm version" /></a></p>
+<p>Run your applications in a WebWorker and have changes automatically update the DOM.</p>
+<h2>Install</h2>
+<pre><code class="language-shell">npm install worker-render --save
+</code></pre>
+<h2>Usage</h2>
+<p>To use worker-render you need a module that runs in the window and one that runs in a Web Worker.
+Getting your app to run in a Web Worker is up to you, but it is easy with <a href="http://stealjs.com/">StealJS</a>.</p>
+<h3>window.js</h3>
+<pre><code class="language-js">var windowRender = require(&quot;worker-render/window&quot;);
+
+var worker = new Worker(...);
+windowRender.updateWith(worker);
+</code></pre>
+<h3>worker.js</h3>
+<p><strong>worker-render</strong> will work with any JavaScript framework. In this example <code>todoApp</code> is a
+function that returns a DocumentFragment. How you initialize your application is up
+to you, but you should do so in the <code>ready</code> callback.</p>
+<pre><code class="language-js">var renderer = require(&quot;worker-render/worker&quot;);
+var $ = require(&quot;jquery&quot;);
+var todoApp = require(&quot;./todo-app&quot;);
+
+renderer.ready(render);
+
+function render(){
+  $(&quot;#app&quot;).html(todoApp());
+}
+</code></pre>
+<h2>License</h2>
+<p>MIT</p>
+
+		</section>
+		
+		
+
+		
+
+		
+	
+	
+	</article>
+	
+	
+
+</div>
+
+
+
+
+
+	
+	<footer>
+		<nav class="container">
+			<a class="brand javascriptmvc" href="index.html"></a>
+		</nav>
+	</footer>
+	
+	
+	<script type="text/javascript">
+		var docObject = {"type":"page","name":"readme","src":"readme.md","description":"# worker-render","glob":{"pattern":"{src/**/*,readme,docs/**/*}.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/Users/matthew/Projects/worker-render"},"minifyBuild":false,"watch":true,"dest":"/Users/matthew/Projects/worker-render-docs/doc","generators":["html"],"docConfigDest":"../documentjs.json","project":{"version":"0.1","name":"can-connect","source":"git://github.com/canjs/can-connect#master"}};
+	</script>
+	
+	
+		<script>
+		  steal = {
+		    instantiated: {
+		      "bundles/static.css!$css" : null
+		    }
+		  }
+		</script>
+		<script type='text/javascript' 
+				data-main="static"
+				data-config="./static/config.js"
+				src="./static/steal.production.js"
+	    		bundles-path="bundles"></script>
+	
+</body>
+
+</html>
