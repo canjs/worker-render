@@ -127,6 +127,9 @@ br {
 * Variables used to define the site's color palette.
 * @iframe demos/color-palette.html 630
 **/
+body .brand {
+  background-size: 120px;
+}
 /**
 * @stylesheet base.less Base Styles
 * @parent Styles.baseline-elements 0
@@ -972,7 +975,7 @@ footer li {
   height: 54px;
   width: 170px;
   text-align: left;
-  background: url(../img/logo.svg) no-repeat left center;
+  background: url(../img/logo.png) no-repeat left center;
   background-size: 170px;
 }
 footer .brand {

@@ -1,6 +1,6 @@
 /*[system-bundles-config]*/
-System.paths["bundles/*.css"] ="../../../../../../../../../../../node_modules/documentjs/site/static/build/917c51373c902dc4a003c7fd949774c5/bundles/*css";
-System.paths["bundles/*"] = "../../../../../../../../../../../node_modules/documentjs/site/static/build/917c51373c902dc4a003c7fd949774c5/bundles/*.js";
+System.paths["bundles/*.css"] ="../../../../../../../../../../../node_modules/documentjs/site/static/build/21aa896404b6a39bcc3102db8c989a7f/bundles/*css";
+System.paths["bundles/*"] = "../../../../../../../../../../../node_modules/documentjs/site/static/build/21aa896404b6a39bcc3102db8c989a7f/bundles/*.js";
 System.bundles = {"bundles/static.css!":["styles/styles.less!$less"]};
 /*config.js*/
 define('config.js', function(require, exports, module) {
