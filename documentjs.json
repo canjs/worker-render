@@ -1,9 +1,9 @@
 {
 	"versions": {
-		"0.1": {
-			"source":  "git://github.com/canjs/can-connect#master",
+		"1.0.0": {
+			"source":  "git://github.com/canjs/worker-render#master",
 			"minify": false
 		}
 	},
-	"defaultVersion" : "0.1"
+	"defaultVersion" : "1.0.0"
 }
