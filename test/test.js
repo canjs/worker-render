@@ -41,3 +41,17 @@ QUnit.test("Push state works", function(){
 	F("a").exists().click();
 	F("h4").exists("h4 added to the page, page didn't change");
 });
+
+QUnit.module("forms", {
+	setup: function(){
+		F.open("//form/index.html");
+	}
+});
+
+QUnit.test("forms can be filled out and submitted", function(){
+	F("form").exists();
+	F("[type=checkbox]").click();
+	F("[type=text]").click().type("Matthew");
+	F("[type=submit]").click();
+	F("#done").exists("Form was filled out and submitted");
+});
