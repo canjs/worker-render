@@ -1,3 +1,8 @@
+<!--
+@page worker-render
+@group worker-render.modules Modules
+-->
+
 # worker-render
 
 [![npm version](https://badge.fury.io/js/worker-render.svg)](http://badge.fury.io/js/worker-render)
