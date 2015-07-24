@@ -5,7 +5,8 @@
 				"pattern": "{src/**/*,readme,docs/**/*}.{js,md}"
 			},
 			"parent" : "worker-render",
-			"minifyBuild": false
+			"minifyBuild": false,
+			"static": "docs/theme/static"
 		}
 	}
 }
