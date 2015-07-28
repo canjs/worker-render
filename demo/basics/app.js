@@ -52,7 +52,7 @@ function template(dbs) {
 		var queryCount = document.createElement("td");
 		queryCount.className = "query-count";
 		var queryCountSpan = document.createElement("span");
-		queryCountSpan.className = "query-count";
+		queryCountSpan.className = db.countClassName;
 		queryCountSpan.appendChild(document.createTextNode(db.queries.length));
 		queryCount.appendChild(queryCountSpan);
 		tr.appendChild(queryCount);
@@ -61,6 +61,7 @@ function template(dbs) {
 		for(var j = 0, jLen = db.topFiveQueries.length; j < jLen; j++) {
 			var query = db.topFiveQueries[j];
 			var queryTd = document.createElement("td");
+			queryTd.className = "Query " + query.className;
 			queryTd.appendChild(document.createTextNode(query.elapsed));
 
 			var popover = document.createElement("div");
