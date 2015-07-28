@@ -42,6 +42,9 @@ function updateWith(worker){
 		}
 
 		var patches = ev.data;
-		applyPatches(document, patches, patchOptions);
+
+		requestAnimationFrame(function(){
+			applyPatches(document, patches, patchOptions);
+		});
 	};
 }

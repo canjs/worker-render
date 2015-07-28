@@ -1,0 +1,50 @@
+<html>
+<head>
+	<title>worker-render demo</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/jashkenas/dbmonster/gh-pages/style.css">
+</head>
+<body>
+	<script src="../../dist/global/window.js"></script>
+	<script>
+		var worker = new Worker("app.js");
+		windowRender.updateWith(worker);
+	</script>
+
+	<script type="text/html" id="template">
+	  <table class="table table-striped latest-data">
+		<tbody>
+
+		<% for (var i = 0, l = data.dbs.length; i < l; i++) { %>
+			<% var db = data.dbs[i]; %>
+			<tr>
+
+			  <td class="dbname">
+				<%= db.name %>
+			  </td>
+
+			  <td class="query-count">
+				<span class="<%= db.countClassName %>">
+				  <%= db.queries.length %>
+				</span>
+			  </td>
+
+			  <% for (var j = 0, k = db.topFiveQueries.length; j < k; j++) { %>
+				<% var query = db.topFiveQueries[j]; %>
+				<td class="Query <%= query.className %>">
+				  <%= query.elapsed %>
+				  <div class="popover left">
+					<div class="popover-content"><%= query.query %></div>
+					<div class="arrow"></div>
+				  </div>
+				</td>
+			  <% } %>
+
+			</tr>
+		  <% } %>
+
+		</tbody>
+	  </table>
+	</script>
+</body>
+</html>
