@@ -1,0 +1,1 @@
+self.workerRender = require("../worker");

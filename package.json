@@ -33,7 +33,8 @@
   "dependencies": {
     "can": "^2.3.0-pre.1",
     "dom-patch": "^1.0.0",
-    "micro-location": "^0.1.4"
+    "micro-location": "^0.1.4",
+    "node-route": "^1.0.1"
   },
   "system": {
     "main": "window/window",

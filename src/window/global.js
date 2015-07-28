@@ -1,0 +1,1 @@
+window.windowRender = require("../window");
