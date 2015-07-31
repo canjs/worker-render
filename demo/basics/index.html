@@ -11,37 +11,34 @@
 		windowRender.updateWith(worker);
 	</script>
 
-	<script type="text/html" id="template">
+	<script type="text/stache" id="template">
 	  <table class="table table-striped latest-data">
 		<tbody>
 
-		<% for (var i = 0, l = data.dbs.length; i < l; i++) { %>
-			<% var db = data.dbs[i]; %>
+		{{#each dbs}}
 			<tr>
-
 			  <td class="dbname">
-				<%= db.name %>
+				{{name}}
 			  </td>
 
 			  <td class="query-count">
-				<span class="<%= db.countClassName %>">
-				  <%= db.queries.length %>
+				<span class="{{countClassName}}">
+					{{queryCount}}
 				</span>
 			  </td>
 
-			  <% for (var j = 0, k = db.topFiveQueries.length; j < k; j++) { %>
-				<% var query = db.topFiveQueries[j]; %>
-				<td class="Query <%= query.className %>">
-				  <%= query.elapsed %>
+			  {{#each topFiveQueries}}
+				<td class="Query {{className}}">
+					{{elapsed}}
 				  <div class="popover left">
-					<div class="popover-content"><%= query.query %></div>
+					<div class="popover-content">{{query}}</div>
 					<div class="arrow"></div>
 				  </div>
 				</td>
-			  <% } %>
+			  {{/each}}
 
 			</tr>
-		  <% } %>
+		  {{/each}}
 
 		</tbody>
 	  </table>
