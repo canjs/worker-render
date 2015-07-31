@@ -1,0 +1,47 @@
+<html>
+<head>
+	<title>worker-render demo</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/jashkenas/dbmonster/gh-pages/style.css">
+</head>
+<body>
+	<script src="https://cdn.rawgit.com/canjs/worker-render/1.1.7/dist/global/window.js"></script>
+	<script>
+		var worker = new Worker("app.js");
+		windowRender.updateWith(worker);
+	</script>
+
+	<script type="text/stache" id="template">
+	  <table class="table table-striped latest-data">
+		<tbody>
+
+		{{#each dbs}}
+			<tr>
+			  <td class="dbname">
+				{{name}}
+			  </td>
+
+			  <td class="query-count">
+				<span class="{{countClassName}}">
+					{{queryCount}}
+				</span>
+			  </td>
+
+			  {{#each topFiveQueries}}
+				<td class="Query {{className}}">
+					{{elapsed}}
+				  <div class="popover left">
+					<div class="popover-content">{{query}}</div>
+					<div class="arrow"></div>
+				  </div>
+				</td>
+			  {{/each}}
+
+			</tr>
+		  {{/each}}
+
+		</tbody>
+	  </table>
+	</script>
+</body>
+</html>
