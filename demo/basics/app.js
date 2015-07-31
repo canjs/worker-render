@@ -33,7 +33,6 @@ function render() {
 				countClassName: db.countClassName,
 				queryCount: db.queries.length
 			});
-			//item.attr("queries").attr(db.queries, true);
 
 			j = 0;
 			jLen = 5;
