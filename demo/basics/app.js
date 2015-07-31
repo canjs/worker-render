@@ -16,9 +16,7 @@ function render() {
 	function redraw() {
 		var dbs = getDatabases();
 
-		var drawBefore = new Date();
 		newTable = template(dbs);
-		console.log("took", new Date() - drawBefore);
 		if(table) {
 			body.removeChild(table);
 		}
