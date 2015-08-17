@@ -2,8 +2,8 @@ window = self;
 
 importScripts("https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js");
 importScripts("https://cdn.rawgit.com/jashkenas/dbmonster/gh-pages/junkola-copied-from-ember.js");
-importScripts("https://cdn.rawgit.com/canjs/worker-render/1.1.8/dist/global/vdom.js");
-importScripts("https://cdn.rawgit.com/canjs/worker-render/1.1.8/dist/global/worker.js");
+importScripts("https://cdn.rawgit.com/canjs/worker-render/1.1.8-dist/dist/global/vdom.js");
+importScripts("https://cdn.rawgit.com/canjs/worker-render/1.1.8-dist/dist/global/worker.js");
 importScripts("https://cdn.rawgit.com/bitovi/canjs.com/v2.3.0-pre.1/can.jquery.js");
 importScripts("https://cdn.rawgit.com/bitovi/canjs.com/v2.3.0-pre.1/can.stache.js");
 
