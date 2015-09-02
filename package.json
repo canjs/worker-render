@@ -23,9 +23,9 @@
   "devDependencies": {
     "funcunit": "^3.0.0",
     "jquery": "^2.1.4",
-    "steal": "^0.10.5",
+    "steal": "^0.11.0-pre.8",
     "steal-qunit": "0.0.4",
-    "steal-tools": "^0.10.7",
+    "steal-tools": "^0.11.0-pre.11",
     "testee": "^0.2.0",
     "todomvc-app-css": "^1.0.1",
     "todomvc-common": "^1.0.2"
@@ -41,11 +41,38 @@
     "directories": {
       "lib": "src"
     },
-    "configDependencies": [
-      "system-config"
-    ],
     "npmIgnore": [
-      "testee"
-    ]
+      "testee",
+      "todomvc-app-css",
+      "todomvc-common"
+    ],
+    "envs": {
+      "worker-development": {
+        "map": {
+          "can/util/vdom/vdom": "can/util/vdom/vdom"
+        },
+        "meta": {
+          "jquery": {
+            "format": "global",
+            "deps": [
+              "can/util/vdom/vdom"
+            ]
+          }
+        }
+      },
+      "worker-production": {
+        "map": {
+          "can/util/vdom/vdom": "can/util/vdom/vdom"
+        },
+        "meta": {
+          "jquery": {
+            "format": "global",
+            "deps": [
+              "can/util/vdom/vdom"
+            ]
+          }
+        }
+      }
+    }
   }
 }
