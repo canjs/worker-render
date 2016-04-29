@@ -1,0 +1,66 @@
+/*worker-render@1.2.2#window/event_handler*/
+var extend = require('../simple_extend.js');
+var nodeRoute = require('node-route');
+var valueSetters = {
+        INPUT: function (ev, el) {
+            if (el.type === 'checkbox') {
+                return {
+                    checked: el.checked,
+                    value: el.checked
+                };
+            } else {
+                return { value: el.value };
+            }
+        },
+        SELECT: function (ev, el) {
+            return { value: el.value };
+        }
+    };
+var doPreventDefault = {
+        click: true,
+        submit: true
+    };
+module.exports = function (worker) {
+    var pendingEvents = {}, id = 0;
+    var eventHandler = function (ev) {
+        if (ev.defaultPrevented) {
+            return;
+        }
+        var el = ev.target;
+        var route = nodeRoute.getID(el);
+        var values;
+        if (valueSetters[el.tagName]) {
+            values = valueSetters[el.tagName](ev, el);
+        }
+        var eventObject = extend({}, ev);
+        extend(eventObject, {
+            target: nodeRoute.getID(ev.target),
+            currentTarget: nodeRoute.getID(ev.currentTarget)
+        });
+        if (doPreventDefault[ev.type]) {
+            if (id < 100) {
+                id++;
+            } else {
+                id = 0;
+            }
+            pendingEvents[id] = ev;
+            ev.preventDefault();
+        }
+        worker.postMessage({
+            type: 'event',
+            route: route,
+            event: eventObject,
+            values: values,
+            id: id
+        });
+    };
+    eventHandler.acknowledge = acknowledge;
+    function acknowledge(data) {
+        var event = pendingEvents[data.id];
+        delete pendingEvents[data.id];
+        if (event && !data.defaultPrevented) {
+            event.target.dispatchEvent(event);
+        }
+    }
+    return eventHandler;
+};
