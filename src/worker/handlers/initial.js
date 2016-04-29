@@ -1,4 +1,4 @@
-var Location = require("micro-location");
+var Location = require("micro-location").Location;
 var extend = require("../../simple_extend");
 
 module.exports = function(data){
