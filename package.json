@@ -21,18 +21,20 @@
   },
   "homepage": "https://github.com/canjs/worker-render#readme",
   "devDependencies": {
+    "can-define": "^1.0.17",
+    "can-stache": "^3.0.21",
     "funcunit": "^3.0.0",
-    "jquery": "^3.1.1",
-    "steal": "^0.16.43",
-    "steal-qunit": "0.1.4",
-    "steal-tools": "^0.16.8",
+    "steal": "^1.0.0",
+    "steal-qunit": "1.0.0",
+    "steal-tools": "^1.0.0",
     "testee": "^0.3.0",
     "todomvc-app-css": "^2.0.6",
     "todomvc-common": "^1.0.2"
   },
   "dependencies": {
-    "can": "^3.2.2",
-    "dom-patch": "^1.0.0",
+    "can-event": "^3.2.0",
+    "can-vdom": "^3.0.3",
+    "dom-patch": "2.0.0-alpha.0",
     "micro-location": "^0.1.4",
     "node-route": "^1.0.1"
   },
@@ -40,39 +42,6 @@
     "main": "window/window",
     "directories": {
       "lib": "src"
-    },
-    "npmIgnore": [
-      "testee",
-      "todomvc-app-css",
-      "todomvc-common"
-    ],
-    "envs": {
-      "worker-development": {
-        "map": {
-          "can/util/vdom/vdom": "can/util/vdom/vdom"
-        },
-        "meta": {
-          "jquery": {
-            "format": "global",
-            "deps": [
-              "can/util/vdom/vdom"
-            ]
-          }
-        }
-      },
-      "worker-production": {
-        "map": {
-          "can/util/vdom/vdom": "can/util/vdom/vdom"
-        },
-        "meta": {
-          "jquery": {
-            "format": "global",
-            "deps": [
-              "can/util/vdom/vdom"
-            ]
-          }
-        }
-      }
     }
   }
 }

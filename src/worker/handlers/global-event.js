@@ -1,4 +1,4 @@
-var can = require("can/util/util");
+var canEvent = require("can-event");
 var special = require("./globals/special");
 
 module.exports = function(data){
@@ -10,5 +10,5 @@ module.exports = function(data){
 		special[event.type](event);
 	}
 
-	can.trigger(window, event);
+	canEvent.trigger.call(window, event);
 };

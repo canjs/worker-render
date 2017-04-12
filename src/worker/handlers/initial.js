@@ -2,7 +2,8 @@ var Location = require("micro-location");
 var extend = require("../../simple_extend");
 
 module.exports = function(data){
-	var newLocation = Location.parse(data.location);
+	//var newLocation = Location.parse(data.location);
+	var newLocation = new URL(data.location);
 	extend(window.location, newLocation);
 	var docEl = document.documentElement;
 

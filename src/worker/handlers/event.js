@@ -1,5 +1,5 @@
 var nodeRoute = require("node-route");
-var can = require("can/util/util");
+var canEvent = require("can-event");
 
 /**
  * DOM event handler
@@ -21,7 +21,7 @@ module.exports = function(data){
 		event.defaultPrevented = true;
 	};
 
-	can.trigger(event.currentTarget, event);
+	canEvent.trigger.call(event.currentTarget, event);
 
 	// Send back an ack so that the window side can retrigger the event.
 	postMessage({

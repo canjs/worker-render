@@ -1,3 +1,4 @@
+require("can-vdom");
 var handlers = require("./handlers/handlers");
 var patch = require("dom-patch");
 
