@@ -5,6 +5,8 @@
 
 # worker-render
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/worker-render.svg)](https://greenkeeper.io/)
+
 [![npm version](https://badge.fury.io/js/worker-render.svg)](http://badge.fury.io/js/worker-render)
 
 Run your applications in a WebWorker and have changes automatically update the DOM.
