@@ -34,7 +34,7 @@
     "can": "^3.2.2",
     "dom-patch": "^1.0.0",
     "micro-location": "^0.1.4",
-    "node-route": "^1.0.1"
+    "node-route": "^1.1.0"
   },
   "system": {
     "main": "window/window",
