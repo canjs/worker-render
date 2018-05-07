@@ -27,7 +27,7 @@
     "steal-qunit": "0.1.4",
     "steal-tools": "^0.16.8",
     "testee": "^0.4.0",
-    "todomvc-app-css": "^2.0.6",
+    "todomvc-app-css": "^2.1.2",
     "todomvc-common": "^1.0.2"
   },
   "dependencies": {
